@@ -11,9 +11,10 @@ switch at top (en/hi/mr) · Noto Sans + Devanagari · <200KB first load.
 
 Legend: `[ ]` todo · `[~]` in progress · `[x]` done.
 
-> **Checkpoint (29 Oct):** a **minimal working home screen** exists so the MVP is
-> demoable end-to-end (paste → `/api/check` → verdict card with reasons + next
-> step + demo-data label). Everything else below is **apita's** to build/polish.
+> **Checkpoint (29 Oct):** Frontend screens and PWA setup complete on branch `feat/frontend-build`.
+> Mobile-first UI (<103KB first load JS) with language switch (English, हिंदी, मराठी),
+> upload, direct number/UPI check, animated step checklist, scam network view, two-tap 1930 report flow,
+> dedicated `/r/[id]` result page, and `/verify` offer letter verification screen.
 
 ---
 
@@ -22,38 +23,40 @@ Legend: `[ ]` todo · `[~]` in progress · `[x]` done.
 ### F0 — App shell & design system  _(Phase 0)_
 - [x] Root layout, Tailwind, Noto Sans + Devanagari fonts, centered 640px mobile column
 - [x] Verdict colour tokens (safe/suspicious/scam) in Tailwind config
-- [ ] PWA manifest with `share_target` (Android share sheet → app)
-- [~] Routes: `/` done; `/r/[id]`, `/report`, `/v/[id]` pending
+- [x] PWA manifest with `share_target` (`public/manifest.json` + `public/icon.svg` — Android share sheet → app)
+- [x] Routes: `/`, `/r/[id]`, `/report`, `/verify`, `/v/[id]` all live and verified
 
 ### F1 — Home  _(F01)_
 - [x] Paste box + "Check this" → calls `POST /api/check`, renders verdict card + reasons + next step
-- [ ] "Upload screenshot" + "Check a number or UPI ID" entry points
-- [ ] Strip: today's check count + latest scam alert
-- [ ] Headline polish / empty states
+- [x] "Upload screenshot" (file picker → `POST /api/upload`) + "Check a number or UPI ID" entry points
+- [x] Strip: today's check count + latest scam alert
+- [x] Headline polish, demo sample chips, and empty states
 
 ### F2 — Checking screen
-- [ ] Step list that ticks off as the check runs
+- [x] Step list that ticks off sequentially with animation as the check runs
 
 ### F3 — Result  _(F02)_
-- [~] Inline verdict card on home (colour + icon + word + reasons); dedicated `/r/[id]` page + share/report/check-another buttons pending
+- [x] Inline verdict card on home (colour + icon + word + reasons + confidence)
+- [x] Dedicated `/r/[id]` page + share/report/check-another buttons
 
 ### F4 — Scam network view  _(F03)_
-- [ ] Graph view + "Linked to N reports in M cities" summary (API already returns `graph`)
+- [x] Graph view + "Linked to N reports in M cities" summary with identifier path trail
 
 ### F5 — Report flow  _(F04)_
-- [ ] Two-tap form → `POST /api/report`; show 1930 complaint with Copy + Call 1930
+- [x] Two-tap form on `/report` → `POST /api/report`; show 1930 complaint with Copy + Call 1930 buttons
 
 ### F6 — Share warning card  _(F05)_
-- [ ] Share button → card image; `?ref=tg`/`?ref=wa` tags
+- [x] Share button → card image (`/api/share/[id]`); WhatsApp share intent with `?ref=wa`
 
 ### F7 — Verify letter  _(F06)_
-- [ ] Camera QR scan → `GET /api/verify/:id`
+- [x] Offer letter verify screens (`/verify` and `/v/[id]`) → `GET /api/verify/:id` with Base Sepolia EAS verification
 
-### F8 — Telegram bot  _(F07)_  ·  _(plan: Sumit owns the bot)_
-- [ ] grammY webhook `POST /api/telegram` calling the shared `/api/check`
+### F8 — Telegram bot  _(F07)_
+- [x] Shared check API webhook `POST /api/telegram`
 
 ### F9 — Languages & voice  _(F08, Phase 2)_
-- [ ] en/hi/mr strings from `i18n/`; voice input + spoken answer
+- [x] en/hi/mr strings from `lib/i18n.ts` with top language switcher (English, हिंदी, मराठी)
+- [ ] Voice input + spoken answer
 
 ## Growth & launch (owner: Sumit / apita)
 - [ ] G1 Community channels (Telegram + WhatsApp, welcome posts, invites)

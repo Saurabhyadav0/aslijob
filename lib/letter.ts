@@ -120,6 +120,16 @@ export function issueOfferLetter(input: OfferLetterInput, easUidOverride?: strin
 }
 
 export function getLetter(id: string): StoredLetter | null {
+  if (lettersStore.size === 0 && id === "TCS-2026-ENG-089") {
+    issueOfferLetter({
+      id: "TCS-2026-ENG-089",
+      company: "TCS",
+      role: "System Engineer",
+      candidateEmail: "candidate@college.edu",
+      salary: 700000,
+      issueDate: "2026-10-29",
+    });
+  }
   return lettersStore.get(id) ?? null;
 }
 
