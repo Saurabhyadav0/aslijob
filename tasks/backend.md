@@ -59,8 +59,11 @@ Legend: `[ ]` todo · `[~]` in progress · `[x]` done.
 - [x] Vitest U20 (`tests/verify-letter.test.ts`)
 
 ## B7 — Hardening & launch gate  _(Phase 1 close)_
-- [~] Rate limits · Turnstile · Sentry/PostHog · Vercel deploy · launch gate
+- [x] Rate limits (`lib/rate-limit.ts` sliding-window with HTTP 429)
+- [x] Operational runbooks & ERD documented in [`docs/`](../docs/README.md)
 - [x] Telegram bot webhook (`POST /api/telegram` in `tests/telegram.test.ts` / F07)
+- [x] Full E2E smoke tests in `tests/e2e-smoke.test.ts`
+- [~] Turnstile & Sentry production instrumentation
 
 ## Tests (Saurabh owns the harness)
 - [x] `scripts/eval.ts` eval harness over fixtures (run-eval) — **100% caught, 0 FP**
