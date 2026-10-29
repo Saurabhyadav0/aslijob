@@ -1,13 +1,41 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 
-export default function PricingPage() {
-  const [studentCount, setStudentCount] = useState(1200);
+function PricingContent() {
+  const [studentCount, setStudentCount] = useState(500);
+  const [loading, setLoading] = useState(false);
+  const searchParams = useSearchParams();
+  const isSuccess = searchParams.get("status") === "success";
 
-  const pricePerStudent = 29; // Rs 29/student/year (Plan Page 33: Rs 20 to 50)
+  const pricePerStudent = 29; // Rs 29/student/year (Plan Page 33)
   const annualTotal = (studentCount * pricePerStudent).toLocaleString("en-IN");
+
+  async function handleCheckout() {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/checkout/dodo", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          studentCount,
+          collegeName: "Campus Placement Cohort",
+        }),
+      });
+      const data = await res.json();
+      if (data.checkoutUrl) {
+        window.location.href = data.checkoutUrl;
+      } else {
+        alert("Unable to initiate checkout. Please check connection.");
+      }
+    } catch {
+      alert("Checkout error. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <main className="space-y-8 py-8 pb-16">
@@ -21,6 +49,13 @@ export default function PricingPage() {
         </span>
       </header>
 
+      {/* Success Banner */}
+      {isSuccess && (
+        <div className="rounded-2xl border border-emerald-500/40 bg-emerald-950/40 p-4 text-center text-xs text-emerald-300">
+          🎉 <strong>Payment Successful via Dodo!</strong> Your college placement cohort protection plan is now active.
+        </div>
+      )}
+
       {/* Hero */}
       <div className="space-y-2 text-center">
         <span className="rounded-full border border-sky-500/30 bg-sky-950/40 px-3 py-1 text-xs font-semibold text-sky-400">
@@ -30,7 +65,7 @@ export default function PricingPage() {
           Protect Your Entire Batch From Job Fraud
         </h1>
         <p className="text-sm text-slate-400 max-w-md mx-auto">
-          Scammers steal Rs 15,000 to Rs 60,000 from freshers in fake registration and laptop deposits. Keep your campus safe.
+          Scammers steal ₹15,000 to ₹60,000 from freshers in fake registration and laptop deposits. Keep your campus safe.
         </p>
       </div>
 
@@ -49,16 +84,16 @@ export default function PricingPage() {
               <span className="text-emerald-400">✓</span> Unlimited text & message checks
             </li>
             <li className="flex items-center gap-2">
-              <span className="text-emerald-400">✓</span> Screenshot & PDF offer parsing
+              <span className="text-emerald-400">✓</span> Screenshot & PDF offer letter OCR
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="text-emerald-400">✓</span> 1930 Cybercrime complaint draft
             </li>
             <li className="flex items-center gap-2">
               <span className="text-emerald-400">✓</span> 2-hop scam network graph lookup
             </li>
             <li className="flex items-center gap-2">
-              <span className="text-emerald-400">✓</span> Ready 1930 Cybercrime complaint draft
-            </li>
-            <li className="flex items-center gap-2">
-              <span className="text-emerald-400">✓</span> Offer letter onchain EAS verification
+              <span className="text-emerald-400">✓</span> WhatsApp warning card generator
             </li>
           </ul>
 
@@ -66,35 +101,33 @@ export default function PricingPage() {
             href="/"
             className="block w-full rounded-xl border border-slate-700 bg-slate-800 py-3 text-center text-xs font-bold text-white hover:bg-slate-700 transition"
           >
-            Start Checking Free
+            Use Free Checker
           </Link>
         </div>
 
-        {/* College & TPO Plan (Paid) */}
-        <div className="rounded-2xl border-2 border-sky-500/50 bg-sky-950/20 p-6 space-y-5 relative shadow-lg shadow-sky-950/50">
-          <span className="absolute -top-3 right-6 rounded-full bg-sky-500 px-3 py-0.5 text-[11px] font-bold text-slate-950">
-            Dodo Payments Powered
-          </span>
+        {/* College Batch Plan (Paid) */}
+        <div className="relative rounded-2xl border-2 border-sky-500 bg-gradient-to-b from-sky-950/30 to-slate-900/90 p-6 space-y-5">
+          <div className="absolute -top-3 right-4 rounded-full bg-sky-500 px-3 py-0.5 text-[10px] font-bold text-slate-950">
+            POPULAR FOR COLLEGES
+          </div>
 
           <div>
-            <span className="text-xs font-bold uppercase tracking-wider text-sky-400">College Placement Cells</span>
+            <span className="text-xs font-bold uppercase tracking-wider text-sky-400">Campus Batch Protection</span>
             <div className="mt-2 text-3xl font-extrabold text-white">
               ₹29 <span className="text-xs font-normal text-slate-400">/ student / year</span>
             </div>
-            <p className="mt-1 text-xs text-slate-300">
-              Complete placement protection dashboard & batch threat intelligence.
-            </p>
+            <p className="mt-1 text-xs text-slate-400">Placement cell protection & real-time syndicate tracking.</p>
           </div>
 
-          {/* Calculator */}
-          <div className="rounded-xl border border-sky-900/40 bg-slate-900/80 p-3 space-y-2 text-xs">
-            <div className="flex justify-between text-slate-300">
-              <span>Batch size:</span>
-              <strong className="text-sky-400">{studentCount} Students</strong>
+          {/* Student Batch Slider */}
+          <div className="rounded-xl border border-sky-900/50 bg-slate-950/60 p-3.5 space-y-2">
+            <div className="flex justify-between text-xs text-slate-300">
+              <span>Graduating Batch Size:</span>
+              <span className="font-bold text-sky-400">{studentCount} Students</span>
             </div>
             <input
               type="range"
-              min="200"
+              min="100"
               max="5000"
               step="100"
               value={studentCount}
@@ -125,14 +158,13 @@ export default function PricingPage() {
             </li>
           </ul>
 
-          <a
-            href="https://test.dodopayments.com"
-            target="_blank"
-            rel="noreferrer"
-            className="block w-full rounded-xl bg-sky-500 py-3 text-center text-xs font-bold text-slate-950 hover:bg-sky-400 transition"
+          <button
+            onClick={handleCheckout}
+            disabled={loading}
+            className="block w-full rounded-xl bg-sky-500 py-3 text-center text-xs font-bold text-slate-950 hover:bg-sky-400 transition disabled:opacity-50"
           >
-            Request College Pilot via Dodo
-          </a>
+            {loading ? "Opening Dodo Checkout..." : "Protect My Batch (Pay via Dodo)"}
+          </button>
         </div>
       </div>
 
@@ -142,5 +174,13 @@ export default function PricingPage() {
         </Link>
       </div>
     </main>
+  );
+}
+
+export default function PricingPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center text-slate-400">Loading plans...</div>}>
+      <PricingContent />
+    </Suspense>
   );
 }
