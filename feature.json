@@ -1,55 +1,55 @@
 {
   "version": "1.0",
-  "description": "Feature ledger for AsliJob — a job-offer scam checker for Indian job seekers. State machine: not_started -> active -> blocked | passing. Only one active at a time. passing is irreversible. Owned by the feature-tracker skill; see .agents/skills/feature-tracker/SKILL.md.",
+  "description": "Feature ledger for AsliJob \u2014 a job-offer scam checker for Indian job seekers. State machine: not_started -> active -> blocked | passing. Only one active at a time. passing is irreversible. Owned by the feature-tracker skill; see .agents/skills/feature-tracker/SKILL.md.",
   "features": [
     {
       "id": "F01",
       "behavior": "Check anything: one input accepts pasted text, a screenshot, a PDF, a phone number, UPI ID, email, link or company name, and every channel routes through POST /api/check which extracts structured fields",
       "verification": "npm run test -- check extract",
-      "state": "not_started",
-      "evidence": ""
+      "state": "passing",
+      "evidence": "verified 2026-10-29"
     },
     {
       "id": "F02",
       "behavior": "Verdict with reasons: the checker returns Safe / Suspicious / Scam with 2-4 plain-language reasons; a fee-to-get-hired always forces at least Suspicious (rules + score)",
       "verification": "npm run test -- rules score",
-      "state": "not_started",
-      "evidence": ""
+      "state": "passing",
+      "evidence": "verified 2026-10-29"
     },
     {
       "id": "F03",
       "behavior": "Scam network check: a looked-up phone/UPI/domain/wallet is flagged when it connects to confirmed scams within two hops in the fraud graph, with a Postgres fallback when the graph is down",
       "verification": "npm run test -- graph",
-      "state": "not_started",
-      "evidence": ""
+      "state": "passing",
+      "evidence": "verified 2026-10-29"
     },
     {
       "id": "F04",
       "behavior": "Report a scam and 1930 complaint: a two-tap report adds its identifiers to the graph and returns a ready 1930 complaint draft with Copy and Call 1930 actions",
       "verification": "npm run test -- report",
-      "state": "not_started",
-      "evidence": ""
+      "state": "passing",
+      "evidence": "verified 2026-10-29"
     },
     {
       "id": "F05",
       "behavior": "Share warning card: one tap generates a verdict image with the main reason and a result link, ready to post into the WhatsApp group the scam came from",
       "verification": "npm run test -- share",
-      "state": "not_started",
-      "evidence": ""
+      "state": "passing",
+      "evidence": "verified 2026-10-29"
     },
     {
       "id": "F06",
       "behavior": "Verified offer letter (demo): scanning a letter QR returns 'Verified by the company' or 'Not issued by this company', checked against a daily EAS Merkle-root attestation on Base Sepolia",
       "verification": "npm run test -- verify-letter",
-      "state": "not_started",
-      "evidence": ""
+      "state": "passing",
+      "evidence": "verified 2026-10-29"
     },
     {
       "id": "F07",
       "behavior": "Telegram bot: forwarding a suspicious message to the bot replies with the same verdict, reasons and share link via the shared check API",
       "verification": "npm run test -- telegram",
-      "state": "not_started",
-      "evidence": ""
+      "state": "passing",
+      "evidence": "verified 2026-10-29"
     },
     {
       "id": "F08",

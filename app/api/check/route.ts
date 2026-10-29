@@ -1,11 +1,13 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { runCheck } from "@/lib/check";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 
 const Body = z.object({
   text: z.string().max(10000).optional(),
+  fileId: z.string().uuid().optional(),
   identifier: z
     .object({
       kind: z.enum(["phone", "upi", "email", "domain", "url", "wallet", "telegram"]),
@@ -18,6 +20,15 @@ const Body = z.object({
 });
 
 export async function POST(req: Request) {
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "127.0.0.1";
+  const rl = checkRateLimit(ip);
+  if (!rl.allowed) {
+    return NextResponse.json(
+      { error: { code: "rate_limited", message: "Too many checks. Please wait an hour before checking again." } },
+      { status: 429 },
+    );
+  }
+
   let json: unknown;
   try {
     json = await req.json();
@@ -28,9 +39,9 @@ export async function POST(req: Request) {
   const parsed = Body.safeParse(json);
   if (!parsed.success) return err("invalid_input", parsed.error.issues[0]?.message ?? "Invalid input", 400);
 
-  const { text, identifier } = parsed.data;
-  if (!text?.trim() && !identifier) {
-    return err("invalid_input", "Provide text or an identifier to check", 400);
+  const { text, identifier, fileId } = parsed.data;
+  if (!text?.trim() && !identifier && !fileId) {
+    return err("invalid_input", "Provide text, fileId, or an identifier to check", 400);
   }
 
   try {

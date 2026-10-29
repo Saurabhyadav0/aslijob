@@ -5,13 +5,15 @@ import { runRules } from "./rules";
 import { confidenceFor, finalVerdict, nextStepFor, type AiVerdict } from "./score";
 import { getGraph } from "./graph";
 import { hashMessage } from "./hash";
-import { getCachedCheck, saveCheck, isDemoMode } from "./store";
+import { runLookups } from "./lookups";
+import { getCachedCheck, saveCheck, isDemoMode, getUploadedFile } from "./store";
 import companies from "../fixtures/companies.json";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "http://localhost:3000";
 
 export type CheckInput = {
   text?: string;
+  fileId?: string;
   identifier?: { kind: IdentifierKind; value: string };
   lang?: string;
   channel?: Channel;
@@ -34,9 +36,16 @@ function companyVerified(name: string | null): boolean {
 
 export async function runCheck(input: CheckInput): Promise<CheckResult> {
   const channel: Channel = input.channel ?? "web";
-  const text =
-    input.text ??
-    (input.identifier ? `${input.identifier.kind}: ${input.identifier.value}` : "");
+  let text = input.text;
+  if (!text && input.fileId) {
+    const uploaded = getUploadedFile(input.fileId);
+    if (uploaded) {
+      text = uploaded.text;
+    }
+  }
+  if (!text) {
+    text = input.identifier ? `${input.identifier.kind}: ${input.identifier.value}` : "";
+  }
 
   const messageHash = text.trim() ? hashMessage(text) : null;
   if (messageHash) {
@@ -54,6 +63,8 @@ export async function runCheck(input: CheckInput): Promise<CheckResult> {
   }
 
   const hits = runRules(text, fields);
+  const { result: lookups, lookupHits } = await runLookups(fields);
+  const allHits = [...hits, ...lookupHits];
 
   // Seed the fraud graph with every extracted identifier.
   const seeds: Array<{ kind: IdentifierKind; value: string }> = [
@@ -67,13 +78,13 @@ export async function runCheck(input: CheckInput): Promise<CheckResult> {
   const graph = getGraph().neighbourRisk(seeds);
 
   const ai = await aiVerdict();
-  const verdict = finalVerdict(hits, ai, {
+  const verdict = finalVerdict(allHits, ai, {
     confirmedLinks: graph.confirmedLinks,
     reports: graph.reportedCount,
   });
 
-  const demoSources: string[] = [];
-  const reasons: Reason[] = hits.map((h) => ({ id: h.id, text: h.reason }));
+  const demoSources: string[] = [...lookups.sources];
+  const reasons: Reason[] = allHits.map((h) => ({ id: h.id, text: h.reason }));
 
   if (graph.confirmedLinks > 0) {
     reasons.push({
@@ -102,7 +113,7 @@ export async function runCheck(input: CheckInput): Promise<CheckResult> {
   const result: CheckResult = {
     checkId: randomUUID(),
     verdict,
-    confidence: confidenceFor(hits, graph),
+    confidence: confidenceFor(allHits, graph),
     reasons,
     graph,
     nextStep: nextStepFor(verdict),
@@ -112,6 +123,6 @@ export async function runCheck(input: CheckInput): Promise<CheckResult> {
   };
   result.shareUrl = `${BASE_URL}/r/${result.checkId}`;
 
-  saveCheck(messageHash, result);
+  saveCheck(messageHash, result, seeds);
   return result;
 }
