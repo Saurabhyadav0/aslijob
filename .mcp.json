@@ -3,13 +3,17 @@
   "mcpServers": {
     "supabase": {
       "command": "npx",
-      "args": ["-y", "@supabase/mcp-server-supabase", "--project-ref", "<PROJECT_REF>"],
+      "args": ["-y", "@supabase/mcp-server-supabase", "--project-ref", "rqvwwudqyjoesvvgpfkx"],
       "env": { "SUPABASE_ACCESS_TOKEN": "" }
     },
     "tigergraph": {
-      "command": "npx",
-      "args": ["-y", "<tigergraph-mcp-package>"],
-      "env": { "TIGERGRAPH_HOST": "", "TIGERGRAPH_TOKEN": "" }
+      "command": "uvx",
+      "args": ["tigergraph-mcp"],
+      "env": {
+        "TG_HOST": "",
+        "TG_GRAPH": "FraudGraph",
+        "TG_TOKEN": ""
+      }
     },
     "viasocket": {
       "command": "npx",
