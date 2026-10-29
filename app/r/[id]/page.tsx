@@ -1,4 +1,3 @@
-import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getCheck } from "@/lib/store";
 
@@ -33,15 +32,15 @@ export default function ResultPage({ params }: { params: { id: string } }) {
   };
 
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-100 p-6 flex flex-col items-center">
-      <div className="max-w-xl w-full my-8 space-y-6">
+    <main className="min-h-screen bg-slate-950 text-slate-100 p-4 sm:p-6 flex flex-col items-center">
+      <div className="max-w-xl w-full my-6 space-y-6">
         {/* Brand */}
-        <div className="flex items-center justify-between">
-          <Link href="/" className="text-xl font-bold tracking-tight">
+        <div className="flex items-center justify-between border-b border-slate-800/80 pb-3">
+          <Link href="/" className="text-xl font-bold tracking-tight text-white">
             Asli<span className="text-sky-400">Job</span>
           </Link>
           <span className="text-xs uppercase tracking-wider text-slate-400">
-            Fraud Risk Assessment
+            Scam Risk Assessment
           </span>
         </div>
 
@@ -63,12 +62,12 @@ export default function ResultPage({ params }: { params: { id: string } }) {
           <div>
             <h2 className="text-2xl font-bold text-slate-100">
               {check.verdict === "scam"
-                ? "Confirmed / High-Risk Scam"
+                ? "🚨 Confirmed Scam Signal"
                 : check.verdict === "suspicious"
-                ? "Suspicious Signals Detected"
-                : "No Red Flags Found"}
+                ? "⚠️ Suspicious Signals Detected"
+                : "✅ No Red Flags Found"}
             </h2>
-            <p className="mt-1 text-slate-400 text-sm">{check.nextStep}</p>
+            <p className="mt-1.5 text-slate-400 text-sm">{check.nextStep}</p>
           </div>
 
           {/* Reasons */}
@@ -90,31 +89,50 @@ export default function ResultPage({ params }: { params: { id: string } }) {
           </div>
 
           {/* Fraud graph links if present */}
-          {check.graph.confirmedLinks > 0 && (
+          {(check.graph.confirmedLinks > 0 || check.graph.reportedCount > 0) && (
             <div className="bg-red-950/20 border border-red-900/40 rounded-xl p-4 text-xs text-red-200 space-y-1">
-              <p className="font-semibold">Fraud Network Correlation:</p>
+              <p className="font-semibold text-red-300">🕸️ Fraud Network Correlation:</p>
               <p>
-                Linked to {check.graph.linkedReports} confirmed reports in{" "}
-                {check.graph.cities} cities.
+                Linked to {check.graph.linkedReports || check.graph.reportedCount} reports across{" "}
+                {check.graph.cities || 1} cities.
               </p>
             </div>
           )}
 
           {/* Action buttons */}
-          <div className="pt-2 flex flex-col sm:flex-row gap-3">
+          <div className="pt-2 flex flex-col sm:flex-row gap-2.5">
+            <a
+              href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
+                `⚠️ AsliJob Warning: ${check.reasons[0]?.text ?? "Scam alert"}. Check details: ${check.shareUrl}?ref=wa`
+              )}`}
+              target="_blank"
+              rel="noreferrer"
+              className="flex-1 text-center px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition flex items-center justify-center gap-1.5"
+            >
+              <span>💬</span>
+              <span>Share on WhatsApp</span>
+            </a>
+
+            <Link
+              href={`/report?checkId=${check.checkId}`}
+              className="flex-1 text-center px-4 py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs transition flex items-center justify-center gap-1.5"
+            >
+              <span>🚨</span>
+              <span>Report to 1930</span>
+            </Link>
+          </div>
+
+          <div className="flex items-center justify-between pt-1 text-xs">
             <a
               href={`/api/share/${check.checkId}`}
               target="_blank"
               rel="noreferrer"
-              className="flex-1 text-center px-4 py-2.5 rounded-lg bg-sky-500 hover:bg-sky-400 text-slate-950 font-medium text-sm transition"
+              className="text-sky-400 hover:underline"
             >
-              Open Warning Card Image
+              🖼️ Open Warning Image Card
             </a>
-            <Link
-              href="/"
-              className="px-4 py-2.5 rounded-lg border border-slate-700 hover:border-slate-600 text-slate-300 font-medium text-sm text-center transition"
-            >
-              Check another offer
+            <Link href="/" className="text-slate-400 hover:text-slate-200">
+              Check another offer →
             </Link>
           </div>
         </div>
@@ -122,4 +140,3 @@ export default function ResultPage({ params }: { params: { id: string } }) {
     </main>
   );
 }
-
