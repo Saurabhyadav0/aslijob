@@ -1,0 +1,12 @@
+[
+  { "name": "TCS", "domains": ["tcs.com"], "cin": "L22210MH1995PLC084781", "careers": "https://www.tcs.com/careers", "verified": true },
+  { "name": "Infosys", "domains": ["infosys.com"], "cin": "L85110KA1981PLC013115", "careers": "https://www.infosys.com/careers", "verified": true },
+  { "name": "Wipro", "domains": ["wipro.com"], "cin": "L32102KA1945PLC020800", "careers": "https://careers.wipro.com", "verified": true },
+  { "name": "HCL", "domains": ["hcltech.com"], "cin": "L74140DL1991PLC046369", "careers": "https://www.hcltech.com/careers", "verified": true },
+  { "name": "Accenture", "domains": ["accenture.com"], "cin": "U72900KA2015PTC082988", "careers": "https://www.accenture.com/in-en/careers", "verified": true },
+  { "name": "Capgemini", "domains": ["capgemini.com"], "cin": "U72200MH2000PLC130194", "careers": "https://www.capgemini.com/careers", "verified": true },
+  { "name": "Cognizant", "domains": ["cognizant.com"], "cin": "U72900TN1994PLC028143", "careers": "https://careers.cognizant.com", "verified": true },
+  { "name": "Tech Mahindra", "domains": ["techmahindra.com"], "cin": "L64200MH1986PLC041370", "careers": "https://careers.techmahindra.com", "verified": true },
+  { "name": "Amazon", "domains": ["amazon.com", "amazon.in"], "cin": "U51909KA2012FTC065619", "careers": "https://www.amazon.jobs", "verified": true },
+  { "name": "Flipkart", "domains": ["flipkart.com"], "cin": "U51109KA2012PTC066107", "careers": "https://www.flipkartcareers.com", "verified": true }
+]

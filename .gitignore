@@ -42,3 +42,6 @@ __pycache__/
 .pytest_cache/
 .ruff_cache/
 .mypy_cache/
+
+# TS build info
+*.tsbuildinfo

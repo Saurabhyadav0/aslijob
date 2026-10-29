@@ -1,0 +1,66 @@
+{
+  "_note": "Demo scam reports with MASKED/FAKE identifiers only. Three gangs, linked so the shared-UPI and shared-URL examples work on stage. Never use a real person's number or UPI.",
+  "reports": [
+    {
+      "id": "R1",
+      "city": "Pune",
+      "scam_type": "fee",
+      "status": "confirmed",
+      "identifiers": [
+        { "kind": "phone", "value": "9800001111" },
+        { "kind": "upi", "value": "hr.jobs@upi" }
+      ]
+    },
+    {
+      "id": "R2",
+      "city": "Patna",
+      "scam_type": "fake_offer",
+      "status": "confirmed",
+      "identifiers": [
+        { "kind": "phone", "value": "9700002222" },
+        { "kind": "upi", "value": "hr.jobs@upi" },
+        { "kind": "url", "value": "http://tcs-careers-india.xyz" }
+      ]
+    },
+    {
+      "id": "R3",
+      "city": "Indore",
+      "scam_type": "fake_offer",
+      "status": "confirmed",
+      "identifiers": [
+        { "kind": "phone", "value": "9600003333" },
+        { "kind": "url", "value": "http://tcs-careers-india.xyz" }
+      ]
+    },
+    {
+      "id": "R4",
+      "city": "Mumbai",
+      "scam_type": "task",
+      "status": "confirmed",
+      "identifiers": [
+        { "kind": "telegram", "value": "earnfast_tasks" },
+        { "kind": "upi", "value": "quicktask@ybl" },
+        { "kind": "wallet", "value": "0x1111111111111111111111111111111111111111" }
+      ]
+    },
+    {
+      "id": "R5",
+      "city": "Delhi",
+      "scam_type": "task",
+      "status": "confirmed",
+      "identifiers": [
+        { "kind": "phone", "value": "9500004444" },
+        { "kind": "upi", "value": "quicktask@ybl" }
+      ]
+    },
+    {
+      "id": "R6",
+      "city": "Nagpur",
+      "scam_type": "fee",
+      "status": "unverified",
+      "identifiers": [
+        { "kind": "phone", "value": "9400005555" }
+      ]
+    }
+  ]
+}

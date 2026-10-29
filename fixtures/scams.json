@@ -1,0 +1,10 @@
+[
+  { "id": "S1", "type": "fee", "text": "Congratulations! You are selected for TCS. Pay Rs 2,999 registration fee to hr.jobs@upi to confirm your joining. Call 9800001111." },
+  { "id": "S2", "type": "fee", "text": "Your offer is ready. Pay a refundable laptop deposit of Rs 15,000 before Monday to secure the position." },
+  { "id": "S3", "type": "fake_offer", "text": "TCS HR here. Apply at http://tcs-careers-india.xyz. Contact 9700002222 on WhatsApp. Email hr.tcs.careers@gmail.com" },
+  { "id": "S4", "type": "task", "text": "Earn Rs 5,000 a day liking YouTube videos. Join our Telegram group @earnfast_tasks to start tasks now!" },
+  { "id": "S5", "type": "task", "text": "Work from home. Rate and review products and earn daily. Pay Rs 500 to quicktask@ybl to unlock premium tasks." },
+  { "id": "S6", "type": "remote", "text": "Before your interview please install AnyDesk so our team can set up your laptop remotely." },
+  { "id": "S7", "type": "overseas", "text": "Urgent! Overseas IT job in Thailand, salary 2 lakh/month, no experience needed. Limited seats. Send Aadhaar and pay Rs 8,000 processing fee." },
+  { "id": "S8", "type": "phishing", "text": "Infosys selection. Share your bank account number, OTP and PAN to process your joining bonus immediately." }
+]
