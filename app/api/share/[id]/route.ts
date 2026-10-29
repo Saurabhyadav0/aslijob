@@ -7,15 +7,34 @@ export async function GET(
   req: Request,
   { params }: { params: { id: string } },
 ) {
-  const check = getCheck(params.id);
+  const url = new URL(req.url);
+  let check = getCheck(params.id);
+
+  // If not found in-memory, allow fallback card if requested via query params
+  if (!check && (url.searchParams.has("fallback") || url.searchParams.has("v"))) {
+    const verdict = (url.searchParams.get("v") as any) ?? "scam";
+    const reason =
+      url.searchParams.get("reason") ??
+      "Job offer flagged as high risk. Never pay upfront fees to get hired.";
+    check = {
+      checkId: params.id,
+      verdict,
+      confidence: 0.92,
+      reasons: [{ id: "warning", text: reason }],
+      graph: { linkedReports: 0, cities: 0, confirmedLinks: 0, reportedCount: 0, path: [] },
+      nextStep: "Do not pay. Report to 1930 Cybercrime helpline.",
+      demoSources: [],
+      shareUrl: `${url.origin}/r/${params.id}`,
+      cached: false,
+    };
+  }
+
   if (!check) {
     return NextResponse.json(
       { error: { code: "not_found", message: "Check not found" } },
       { status: 404 },
     );
   }
-
-  const url = new URL(req.url);
   const format = url.searchParams.get("format");
   const accept = req.headers.get("accept") ?? "";
 
