@@ -5,13 +5,14 @@ import { runRules } from "./rules";
 import { confidenceFor, finalVerdict, nextStepFor, type AiVerdict } from "./score";
 import { getGraph } from "./graph";
 import { hashMessage } from "./hash";
-import { getCachedCheck, saveCheck, isDemoMode } from "./store";
+import { getCachedCheck, saveCheck, isDemoMode, getUploadedFile } from "./store";
 import companies from "../fixtures/companies.json";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "http://localhost:3000";
 
 export type CheckInput = {
   text?: string;
+  fileId?: string;
   identifier?: { kind: IdentifierKind; value: string };
   lang?: string;
   channel?: Channel;
@@ -34,9 +35,16 @@ function companyVerified(name: string | null): boolean {
 
 export async function runCheck(input: CheckInput): Promise<CheckResult> {
   const channel: Channel = input.channel ?? "web";
-  const text =
-    input.text ??
-    (input.identifier ? `${input.identifier.kind}: ${input.identifier.value}` : "");
+  let text = input.text;
+  if (!text && input.fileId) {
+    const uploaded = getUploadedFile(input.fileId);
+    if (uploaded) {
+      text = uploaded.text;
+    }
+  }
+  if (!text) {
+    text = input.identifier ? `${input.identifier.kind}: ${input.identifier.value}` : "";
+  }
 
   const messageHash = text.trim() ? hashMessage(text) : null;
   if (messageHash) {
@@ -112,6 +120,6 @@ export async function runCheck(input: CheckInput): Promise<CheckResult> {
   };
   result.shareUrl = `${BASE_URL}/r/${result.checkId}`;
 
-  saveCheck(messageHash, result);
+  saveCheck(messageHash, result, seeds);
   return result;
 }
