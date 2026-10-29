@@ -10,9 +10,9 @@
       "command": "uvx",
       "args": ["tigergraph-mcp"],
       "env": {
-        "TG_HOST": "",
+        "TG_HOST": "https://tg-384a143f-c085-4581-8e3b-46d59c0ed669.tg-2635877100.i.tgcloud.io",
         "TG_GRAPH": "FraudGraph",
-        "TG_TOKEN": ""
+        "TG_SECRET": "c8ib7qfhgb85mrqrst3f3ui8cgi0hk1m"
       }
     },
     "viasocket": {
