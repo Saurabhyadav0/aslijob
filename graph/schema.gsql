@@ -1,0 +1,55 @@
+// TigerGraph Fraud Graph Schema for AsliJob
+CREATE VERTEX Report (
+  PRIMARY_ID id STRING,
+  status STRING,
+  scam_type STRING,
+  city STRING,
+  created_at STRING
+) WITH STATS="OUTDEGREE_BY_EDGETYPE";
+
+CREATE VERTEX Identifier (
+  PRIMARY_ID id STRING,
+  kind STRING,
+  hashed_val STRING,
+  masked_display STRING
+) WITH STATS="OUTDEGREE_BY_EDGETYPE";
+
+CREATE UNDIRECTED EDGE REPORT_IDENTIFIER (FROM Report, TO Identifier);
+
+CREATE GRAPH FraudGraph (Report, Identifier, REPORT_IDENTIFIER);
+
+// Query: 2-hop neighbour risk
+CREATE OR REPLACE QUERY neighbourRisk(SET<STRING> seedIds) FOR GRAPH FraudGraph RETURNS (INT confirmedLinks, INT linkedReports, INT cities, INT reportedCount) {
+  TYPEDEF TUPLE<STRING id, STRING city, STRING status> ReportInfo;
+  SetAccum<STRING> @@cities;
+  SetAccum<STRING> @@confirmedReports;
+  SetAccum<STRING> @@allReports;
+
+  // Hop 0: Starting identifier vertices
+  Start = { Identifier.* };
+  Seeds = SELECT v FROM Start:v WHERE v.id IN seedIds;
+
+  // Hop 1: Direct reports linked to seed identifiers
+  Hop1 = SELECT r FROM Seeds:s -(REPORT_IDENTIFIER)- Report:r
+         ACCUM
+           @@allReports += r.id,
+           IF r.status == "confirmed" THEN
+             @@confirmedReports += r.id,
+             IF r.city != "" THEN @@cities += r.city END
+           END;
+
+  // Hop 2: Other identifiers co-reported with Hop 1 reports
+  Hop2 = SELECT i FROM Hop1:r -(REPORT_IDENTIFIER)- Identifier:i;
+
+  // Hop 3: Reports sharing Hop 2 identifiers (2-hop network)
+  Hop3 = SELECT r2 FROM Hop2:i -(REPORT_IDENTIFIER)- Report:r2
+         ACCUM
+           @@allReports += r2.id,
+           IF r2.status == "confirmed" THEN
+             @@confirmedReports += r2.id,
+             IF r2.city != "" THEN @@cities += r2.city END
+           END;
+
+  RETURN @@confirmedReports.size(), @@confirmedReports.size(), @@cities.size(), @@allReports.size();
+}
+

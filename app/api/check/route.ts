@@ -6,6 +6,7 @@ export const runtime = "nodejs";
 
 const Body = z.object({
   text: z.string().max(10000).optional(),
+  fileId: z.string().uuid().optional(),
   identifier: z
     .object({
       kind: z.enum(["phone", "upi", "email", "domain", "url", "wallet", "telegram"]),
@@ -28,9 +29,9 @@ export async function POST(req: Request) {
   const parsed = Body.safeParse(json);
   if (!parsed.success) return err("invalid_input", parsed.error.issues[0]?.message ?? "Invalid input", 400);
 
-  const { text, identifier } = parsed.data;
-  if (!text?.trim() && !identifier) {
-    return err("invalid_input", "Provide text or an identifier to check", 400);
+  const { text, identifier, fileId } = parsed.data;
+  if (!text?.trim() && !identifier && !fileId) {
+    return err("invalid_input", "Provide text, fileId, or an identifier to check", 400);
   }
 
   try {
