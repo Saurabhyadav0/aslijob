@@ -5,7 +5,7 @@ export const runtime = "nodejs";
 
 export async function POST(req: Request) {
   // Validate Telegram webhook secret token if configured
-  const secret = process.env.TELEGRAM_BOT_SECRET;
+  const secret = process.env.TELEGRAM_BOT_SECRET || process.env.TELEGRAM_WEBHOOK_SECRET;
   if (secret) {
     const tokenHeader = req.headers.get("x-telegram-bot-api-secret-token");
     if (tokenHeader !== secret) {
