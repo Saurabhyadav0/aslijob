@@ -114,3 +114,4 @@ function parseFileText(buffer: Buffer, mimeType: string, filename: string): stri
 
   return buffer.toString("utf-8");
 }
+

@@ -96,3 +96,4 @@ CREATE POLICY "Public can verify offer letters" ON public.offer_letters
 -- Identifiers are read-only to public for verification lookups
 CREATE POLICY "Public can query identifiers" ON public.identifiers
   FOR SELECT TO anon, authenticated USING (true);
+

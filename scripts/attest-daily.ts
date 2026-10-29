@@ -31,3 +31,4 @@ main().catch((err) => {
   console.error("[EAS Attest] Error:", err);
   process.exit(1);
 });
+

@@ -42,3 +42,4 @@ describe("Scoring logic (U10 - U12)", () => {
     expect(nextStepFor("safe")).toContain("No red flags");
   });
 });
+

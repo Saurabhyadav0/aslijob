@@ -10,3 +10,4 @@ export async function GET(
   const result = verifyLetter(params.id);
   return NextResponse.json(result);
 }
+

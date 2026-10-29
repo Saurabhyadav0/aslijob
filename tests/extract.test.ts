@@ -53,3 +53,4 @@ describe("lib/extract: field extraction", () => {
     expect(fields.asks_for).toContain("remote_app");
   });
 });
+

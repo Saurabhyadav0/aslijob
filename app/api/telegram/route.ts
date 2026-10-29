@@ -93,3 +93,4 @@ function formatTelegramReply(result: Awaited<ReturnType<typeof runCheck>>): stri
     `🔗 View & Share: ${result.shareUrl}`,
   ].join("\n");
 }
+

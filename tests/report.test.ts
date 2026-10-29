@@ -67,3 +67,4 @@ describe("Report scam & 1930 complaint (F04 / U17)", () => {
     expect(nextCheck.reasons.some((r) => r.id === "reported_count")).toBe(true);
   });
 });
+

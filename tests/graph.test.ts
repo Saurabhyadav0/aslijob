@@ -51,3 +51,4 @@ describe("Fraud Graph (U13, U14, U16)", () => {
     expect(check.cities).toBeGreaterThanOrEqual(1);
   });
 });
+

@@ -27,3 +27,4 @@ export async function GET(req: Request) {
     timestamp: new Date().toISOString(),
   });
 }
+

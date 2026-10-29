@@ -45,3 +45,4 @@ describe("Share Warning Card & Result Page (F05 / U18)", () => {
     expect(res.status).toBe(404);
   });
 });
+

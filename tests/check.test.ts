@@ -103,3 +103,4 @@ describe("Check pipeline and upload (F01)", () => {
     expect(body).toHaveProperty("verdict");
   });
 });
+

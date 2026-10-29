@@ -52,3 +52,4 @@ CREATE OR REPLACE QUERY neighbourRisk(SET<STRING> seedIds) FOR GRAPH FraudGraph 
 
   RETURN @@confirmedReports.size(), @@confirmedReports.size(), @@cities.size(), @@allReports.size();
 }
+
