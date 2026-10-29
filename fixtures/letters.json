@@ -1,0 +1,32 @@
+[
+  {
+    "id": "TCS-2026-ENG-089",
+    "company": "TCS",
+    "role": "System Engineer",
+    "candidateEmail": "candidate@college.edu",
+    "salary": 700000,
+    "issueDate": "2026-10-29",
+    "status": "verified",
+    "notes": "Genuine demo offer letter attested on Base Sepolia"
+  },
+  {
+    "id": "INFOSYS-2026-ENG-012",
+    "company": "Infosys",
+    "role": "Software Engineer",
+    "candidateEmail": "rahul.sharma@college.edu",
+    "salary": 850000,
+    "issueDate": "2026-10-29",
+    "status": "verified",
+    "notes": "Genuine demo offer letter attested on Base Sepolia"
+  },
+  {
+    "id": "TAMPERED-TCS-089",
+    "company": "TCS",
+    "role": "System Engineer",
+    "candidateEmail": "candidate@college.edu",
+    "salary": 1800000,
+    "issueDate": "2026-10-29",
+    "status": "tampered",
+    "notes": "Tampered copy with inflated salary to test fraud detection"
+  }
+]
