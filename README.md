@@ -68,6 +68,19 @@ proofs · grammY for the Telegram bot.
 
 ---
 
+## Documentation & Architecture
+
+Complete architecture specifications, operational guides, and contracts:
+
+- 📊 **[Entity-Relationship Diagram & Data Architecture](docs/ERD.md)** — Relational tables (Supabase RLS), TigerGraph fraud graph schema, and Base Sepolia EAS onchain verification.
+- 📡 **[REST API Specification](docs/API.md)** — Endpoint contracts, payload schemas, and example requests/responses.
+- 🛠️ **[Operational Runbooks](docs/runbooks/README.md)**:
+  - 🚀 **[Deployment Runbook](docs/runbooks/deployment.md)** — Multi-platform deployment (Vercel, Supabase, TigerGraph, Telegram bot, EAS).
+  - 🔄 **[Operations & Maintenance](docs/runbooks/operations.md)** — Daily batch attestations, graph synchronization, eval benchmarks, and pattern updates.
+  - 🛡️ **[Disaster Recovery & Fallbacks](docs/runbooks/disaster-recovery.md)** — Automated high-availability fallbacks and zero-setup demo mode.
+
+---
+
 ## This repository: the agent-skills framework
 
 This repo is the **agent workflow and skills framework** AsliJob is built with —
