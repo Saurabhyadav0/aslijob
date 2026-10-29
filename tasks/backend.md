@@ -1,73 +1,73 @@
-# Backend tasks — Saurabh
+# Backend tasks — Saurabh (build lead)
 
-Owns the API, the check pipeline, the fraud graph, onchain letters and the bot.
+Scope (from the plan): check API, rules, AI verdict, TigerGraph schema and sync,
+EAS offer-letter flow, Vercel and Supabase setup, and the tests.
 Skills to read first: `backend`, `database-architect`, `testing`, `security`,
-`rbac-gate`, `infra`. Boundary = the API contract in [`README.md`](./README.md).
+`rbac-gate`, `infra`, plus the product skills `add-scam-pattern`, `graph-change`,
+`eas-letter`, `run-eval`. Boundary = the API contract in [`README.md`](./README.md).
 
 Legend: `[ ]` todo · `[~]` in progress · `[x]` done.
 
 ---
 
-## B0 — Project & infra setup  _(no feature id; enables all)_
+## B0 — Project, Supabase & Vercel setup  _(Phase 0)_
 - [ ] `npx create-next-app@latest aslijob --ts --tailwind --app --eslint`
-- [ ] Add scripts to package.json: `dev build lint test e2e eval seed graph:sync`
-- [ ] Install deps: `@supabase/supabase-js zod grammy viem ethers @ethereum-attestation-service/eas-sdk @openzeppelin/merkle-tree openai posthog-* @sentry/nextjs qrcode`, dev `vitest @playwright/test tsx`
-- [ ] Create Supabase project; run the Postgres schema; enable RLS on every table
-- [ ] Write `.env.example` (DB URL/keys, model keys, TG secret, EAS vars, `DEMO_MODE`)
-- [ ] `GET /api/health` returns `{ ok, db, graph }`
+- [ ] package.json scripts: `dev build lint test e2e eval seed graph:sync`
+- [ ] Install deps (supabase-js, zod, grammy, viem, ethers, eas-sdk, merkle-tree, openai, posthog, sentry, qrcode; dev: vitest, playwright, tsx)
+- [ ] Create Supabase project; run the Postgres schema; **RLS on every table**
+- [ ] Deploy to Vercel; CI runs tests on every PR
+- [ ] `GET /api/health` → `{ ok, db, graph }`
 
 ## B1 — Check pipeline  _(F01)_
-- [ ] `lib/extract.ts`: small model pulls company, recruiter, phones, emails, UPI, links, wallets, salary, fee, channel
-- [ ] Vision path for images/PDFs; `POST /api/upload` (<5MB) -> `{ fileId }`, auto-delete after check
+- [ ] `lib/extract.ts` (small model → company, recruiter, phones, emails, UPI, links, wallets, salary, fee, channel) + vision path for images/PDF
+- [ ] `POST /api/upload` (<5MB) → `{ fileId }`, delete the file after the check
 - [ ] `lib/check.ts`: extract → rules → lookups (parallel) → verdict → score → save, each outside call timeout-bounded
-- [ ] `POST /api/check` wired to the pipeline, returns the contract shape
-- [ ] Cache by `message_hash` (same forward returns stored answer, <300ms)
-- [ ] Tests: U9 (extract), U15/U19 (check route)  — `verification: npm run test -- check extract`
+- [ ] `POST /api/check` returns the contract shape; cache by SHA-256 of normalised text (<300ms on a hit)
+- [ ] Tests U9, U15, U19 — `npm run test -- check extract`
 
 ## B2 — Rules & scoring  _(F02)_
 - [ ] `lib/rules.ts`: fee_requested (blocking), free_mail_recruiter, telegram_handoff, task_scam, remote_access (AnyDesk), urgency, early Aadhaar/bank ask
-- [ ] `lib/score.ts`: combine rules + graph + model; blocking → ≥ Suspicious; 2+ confirmed links → Scam; never Scam from one unverified report
-- [ ] Verdict prompt + JSON output (verdict, confidence, reasons)
-- [ ] Tests first: U1–U8 (rules), U10–U12 (score) — `verification: npm run test -- rules score`
+- [ ] `lib/score.ts`: rules + graph + model; blocking → ≥ Suspicious; 2+ confirmed links → Scam; never Scam from one unverified report
+- [ ] `prompts/verdict.md` + JSON output (verdict, confidence, reasons, next_step)
+- [ ] Tests **first**: U1–U8 (rules), U10–U12 (score) — `npm run test -- rules score`
 
 ## B3 — Fraud graph  _(F03)_
-- [ ] Create TigerGraph Savanna workspace; run GSQL vertices/edges + `neighbour_risk` query; make API token
-- [ ] `lib/graph.ts`: query neighbour risk (2 hops), return linkedReports/cities/path
-- [ ] Sync from Postgres on each new report + nightly full sync (`scripts/graph-sync.ts`)
-- [ ] Postgres fallback when the graph is down; restart instance before demo
-- [ ] Tests: U13/U14/U16 — `verification: npm run test -- graph`
+- [ ] TigerGraph Savanna workspace; GSQL vertices/edges + `neighbour_risk`; API token
+- [ ] `lib/graph.ts`: 2-hop neighbour risk → linkedReports/cities/path
+- [ ] `scripts/graph-sync.ts`: sync on each report + nightly full sync
+- [ ] Postgres fallback when the graph is down; restart instance before demos
+- [ ] Tests U13, U14, U16 — `npm run test -- graph`
 
 ## B4 — Report & 1930 complaint  _(F04)_
 - [ ] `POST /api/report`: save report (hashed identifiers, no raw chat), update graph
-- [ ] Build the 1930 complaint draft text from the check
-- [ ] viaSocket webhook `report.created` / `scam.confirmed` (alert college, log case)
-- [ ] Done-when: a new report changes the next check on a linked number — `verification: npm run test -- report`
+- [ ] Build the 1930 complaint draft from the check
+- [ ] viaSocket `report.created` / `scam.confirmed` webhooks (alert college, log case)
+- [ ] Done-when: a new report changes the next check on a linked number — `npm run test -- report`
 
-## B5 — Share card + result data  _(F05)_
-- [ ] Card image route (server-drawn verdict + main reason + link)
-- [ ] Result page data for `/r/[id]`
-- [ ] `verification: npm run test -- share`
+## B5 — Share card route & result data  _(F05)_
+- [ ] Server card-image route (verdict + main reason + link), 1080×1080
+- [ ] Result-page data for `/r/[id]`  — `npm run test -- share`
+- [ ] (Card design & share button are Sumit's — see frontend F6)
 
-## B6 — Verified offer letter (demo)  _(F06)_
-- [ ] `scripts/register-schema.ts`: register EAS letter-batch schema once; save `EAS_SCHEMA_UID`
-- [ ] Hash letter key fields; daily `GET /api/cron/attest` builds Merkle root → 1 attestation on Base Sepolia (`vercel.json` cron 30 18 * * *)
-- [ ] `GET /api/verify/:id`: recompute hash, check Merkle proof vs root
-- [ ] Done-when: demo letter verifies; same letter with one salary digit changed fails — `verification: npm run test -- verify-letter`
+## B6 — Verified offer letter  _(F06)_
+- [ ] `scripts/register-schema.ts`: register the EAS letter-batch schema once; save `EAS_SCHEMA_UID`
+- [ ] Daily `GET /api/cron/attest`: Merkle root of new letters → 1 attestation on Base Sepolia (`vercel.json` cron `30 18 * * *`)
+- [ ] `GET /api/verify/:id`: recompute hash, check proof vs root
+- [ ] Tests U17 (verifies), U18 (one digit changed fails) — `npm run test -- verify-letter`
 
-## B7 — Telegram bot  _(F07)_
-- [ ] grammY webhook `POST /api/telegram`; verify `X-Telegram-Bot-Api-Secret-Token`
-- [ ] Run the shared pipeline; reply with verdict, reasons, share link
-- [ ] setWebhook to the deployed URL — `verification: npm run test -- telegram`
+## B7 — Hardening & launch gate  _(Phase 1 close)_
+- [ ] `rate_limits` table + per-IP / per-TG-user limits (e.g. 20/hr) with a friendly message
+- [ ] Turnstile on the report form; Sentry + PostHog (server)
+- [ ] Deploy: every `.env.example` var in Vercel + `DEMO_MODE=true`
+- [ ] Launch gate: `npm test`, `npm run e2e` on prod, `demo-ready` skill green, production-readiness checklist done
 
-## B8 — Hardening & deploy  _(launch gate)_
-- [ ] `rate_limits` table + middleware (ip/tg key)
-- [ ] PostHog + Sentry (server)
-- [ ] Deploy on Vercel: import repo, add every `.env.example` var + `DEMO_MODE=true`
-- [ ] Launch gate: `npm test`, `npm run e2e` against prod, production-readiness skill
+## Tests (Saurabh owns the harness)
+- [ ] Vitest unit set U1–U20 + Playwright E1–E3 in GitHub Actions on every PR
+- [ ] Done-for-hackathon: all U pass, E1–E3 on prod, ≥ 90% of `scams.json` caught, nothing in `genuine.json` marked Scam
 
-## Phase 2–5 (after hackathon)
-- [ ] F08 languages/voice backend (aigi voice / Bhashini)
+## Phase 2–5 (backend)
+- [ ] F08 voice/translation backend (aigi / Bhashini)
 - [ ] F09 college dashboard API + Dodo Payments plan
-- [ ] F10 employer portal (domain proof, recruiter badges, impersonation alerts)
-- [ ] F11 WhatsApp Cloud API webhook
-- [ ] F13 wallet vertices + public scam-signals API
+- [ ] F10 employer portal + Base **mainnet** letters + impersonation alerts
+- [ ] F11 WhatsApp Cloud API webhook (same pipeline)
+- [ ] F13 wallet vertices + hashed public scam-signals API

@@ -75,9 +75,12 @@ the standards, the feature ledger and the reusable skills a coding agent follows
 while building the product.
 
 ```
-.agents/skills/   29 reusable skills (the source of engineering standards)
-AGENTS.md         the agent contract: how work is done in this repo
+.agents/skills/   34 skills (24 engineering + 5 token-saving caveman + 5 AsliJob product)
+AGENTS.md         the agent contract: rules, commands, skill index
 feature.json      the feature ledger — one feature active at a time
+.env.example      every key name, no values
+.mcp.json         MCP servers for development (Supabase, TigerGraph, viaSocket, GitHub, Vercel, Playwright)
+tasks/            frontend (Sumit) / backend (Saurabh) task board
 ```
 
 > The skills are also mirrored into the editor skills directory (a dot-folder)
@@ -93,7 +96,7 @@ owns how entries are added, removed and verified.
 
 ### Skills
 
-29 skills cover backend work, database design, testing, security, code review,
+34 skills cover backend work, database design, testing, security, code review,
 diagnosis, architecture, PRDs, triage and more. A few highlights:
 
 - **feature-tracker** — maintains `feature.json` and its invariants.
@@ -101,6 +104,8 @@ diagnosis, architecture, PRDs, triage and more. A few highlights:
   build-and-verify loop.
 - **caveman / caveman-compress / caveman-stats** — a token-saving toolkit:
   terser responses and compressed memory files, so every session costs less.
+- **AsliJob product skills** — `add-scam-pattern`, `graph-change`, `eas-letter`,
+  `run-eval`, `demo-ready`: the repeated workflows from the build plan.
 
 See [`AGENTS.md`](./AGENTS.md) for the full skill index and the behavioural
 rules (privacy-by-default, never over-accuse, model routing to keep cost low).

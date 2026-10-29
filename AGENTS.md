@@ -38,7 +38,24 @@ neighbouring files.
    key set, the check pipeline must still run in rules-only mode.
 7. **Conventional Commits.** `feat(scope): msg`, `fix(scope): msg`, etc. No AI
    attribution in commit messages (see `caveman-commit`).
-8. **Clean exit.** Lint and tests green, `feature.json` updated, work committed.
+8. **One check API.** Every channel (web, Telegram, WhatsApp, extension) calls
+   `POST /api/check`. Never copy check logic into a bot or the extension.
+9. **Postgres is the source of truth.** TigerGraph is synced from it and may be
+   down, so every graph call needs a Postgres fallback. Every outside call has a
+   timeout and a fallback (graph→Postgres, model→rules-only, RDAP→demo value).
+10. **Clean exit.** Lint and tests green, `feature.json` updated, work committed.
+
+## Commands
+
+```
+npm run dev | npm test | npm run lint | npm run eval
+npm run graph:sync    # push Postgres reports to TigerGraph
+npm run seed          # load collected scam samples into both stores
+```
+
+**Before you finish a task:** run `npm test` and `npm run lint`. If you changed
+rules or prompts, run `npm run eval` (the `run-eval` skill) and report false
+positives and missed scams before and after.
 
 ## Keep token cost low (model routing)
 
@@ -88,6 +105,16 @@ Read the relevant skill before starting that kind of work
 | Terse communication / commits to save tokens | `caveman`, `caveman-commit`, `caveman-stats` |
 | Compress memory files to save tokens | `caveman-compress` |
 | Runtime feedback loop for self-correction | `runtime-feedback` |
+
+### AsliJob product skills (the plan's Phase-0 set)
+
+| Task | Skill |
+|---|---|
+| Add/update a job-scam detection rule | `add-scam-pattern` |
+| Change the TigerGraph schema, a GSQL query, or the sync | `graph-change` |
+| Offer-letter issuing, recruiter badges, EAS attestations | `eas-letter` |
+| After any rules/prompt/scoring/model change, before a release | `run-eval` |
+| Before a demo, launch post or release | `demo-ready` |
 
 ## Repo map
 
