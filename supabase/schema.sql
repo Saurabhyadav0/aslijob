@@ -76,24 +76,30 @@ ALTER TABLE public.report_identifiers ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.offer_letters ENABLE ROW LEVEL SECURITY;
 
 -- Anonymous users can create checks and read check results by ID
+DROP POLICY IF EXISTS "Public can insert checks" ON public.checks;
 CREATE POLICY "Public can insert checks" ON public.checks
   FOR INSERT TO anon, authenticated WITH CHECK (true);
 
+DROP POLICY IF EXISTS "Public can select checks by id" ON public.checks;
 CREATE POLICY "Public can select checks by id" ON public.checks
   FOR SELECT TO anon, authenticated USING (true);
 
 -- Anonymous users can submit scam reports
+DROP POLICY IF EXISTS "Public can insert reports" ON public.reports;
 CREATE POLICY "Public can insert reports" ON public.reports
   FOR INSERT TO anon, authenticated WITH CHECK (true);
 
+DROP POLICY IF EXISTS "Public can read own report by id" ON public.reports;
 CREATE POLICY "Public can read own report by id" ON public.reports
   FOR SELECT TO anon, authenticated USING (true);
 
 -- Public can verify offer letters
+DROP POLICY IF EXISTS "Public can verify offer letters" ON public.offer_letters;
 CREATE POLICY "Public can verify offer letters" ON public.offer_letters
   FOR SELECT TO anon, authenticated USING (true);
 
 -- Identifiers are read-only to public for verification lookups
+DROP POLICY IF EXISTS "Public can query identifiers" ON public.identifiers;
 CREATE POLICY "Public can query identifiers" ON public.identifiers
   FOR SELECT TO anon, authenticated USING (true);
 
