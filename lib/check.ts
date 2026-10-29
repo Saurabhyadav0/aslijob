@@ -7,6 +7,7 @@ import { getGraph } from "./graph";
 import { hashMessage } from "./hash";
 import { runLookups } from "./lookups";
 import { getCachedCheck, saveCheck, isDemoMode, getUploadedFile } from "./store";
+import { getGeminiVerdict } from "./ai";
 import companies from "../fixtures/companies.json";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "http://localhost:3000";
@@ -77,7 +78,10 @@ export async function runCheck(input: CheckInput): Promise<CheckResult> {
   ];
   const graph = getGraph().neighbourRisk(seeds);
 
-  const ai = await aiVerdict();
+  const ai = await getGeminiVerdict(
+    text,
+    allHits.map((h) => h.reason).join("; "),
+  );
   const verdict = finalVerdict(allHits, ai, {
     confirmedLinks: graph.confirmedLinks,
     reports: graph.reportedCount,
