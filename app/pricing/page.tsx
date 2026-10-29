@@ -110,7 +110,18 @@ function PricingContent() {
               </li>
               <li className="flex items-center gap-2.5">
                 <span className="flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-bold">✓</span>
-                <span>Telegram bot access (@AsliJobBot)</span>
+                <span>
+                  Telegram bot access (
+                  <a
+                    href="https://web.telegram.org/k/#@AsliJobBot"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-sky-400 hover:underline font-bold"
+                  >
+                    @AsliJobBot
+                  </a>
+                  )
+                </span>
               </li>
             </ul>
           </div>

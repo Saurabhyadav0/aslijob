@@ -184,12 +184,12 @@ export default function Home() {
               Base EAS Letters
             </Link>
             <a
-              href="https://t.me/AsliJobBot"
+              href="https://web.telegram.org/k/#@AsliJobBot"
               target="_blank"
               rel="noreferrer"
-              className="text-sky-400 hover:text-sky-300 transition-colors flex items-center gap-1"
+              className="text-sky-400 hover:text-sky-300 transition-colors flex items-center gap-1 font-bold"
             >
-              <span>Telegram Bot</span>
+              <span>🤖 Telegram Bot</span>
               <span className="text-[10px]">↗</span>
             </a>
           </nav>
@@ -562,6 +562,32 @@ export default function Home() {
 
         {/* Right Column: Live Threat Radar & Cyber Defense Feed */}
         <div className="lg:col-span-5 space-y-6">
+          {/* Official Telegram Bot Card */}
+          <div className="rounded-3xl border border-sky-500/30 bg-gradient-to-br from-sky-950/30 via-slate-900/80 to-slate-950 p-5 space-y-3 shadow-xl">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-black uppercase tracking-wider text-sky-400">
+                Official Telegram Bot
+              </span>
+              <span className="flex items-center gap-1.5 text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                Live & Responding
+              </span>
+            </div>
+            <p className="text-xs text-slate-300 leading-relaxed">
+              Forward any suspicious job message or payment request to <strong>@AsliJobBot</strong> to get an instant verdict without leaving Telegram.
+            </p>
+            <a
+              href="https://web.telegram.org/k/#@AsliJobBot"
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center justify-center gap-2 rounded-2xl bg-sky-500 hover:bg-sky-400 py-3 text-xs font-bold text-slate-950 transition-all duration-150 active:scale-[0.96] shadow-md shadow-sky-500/20"
+            >
+              <span>🤖</span>
+              <span>Open @AsliJobBot in Telegram</span>
+              <span className="text-[10px]">↗</span>
+            </a>
+          </div>
+
           {/* Default Graph View when no check active */}
           {!result && (
             <div className="space-y-2">
@@ -675,10 +701,10 @@ export default function Home() {
             EAS Letter Verify
           </Link>
           <a
-            href="https://t.me/AsliJobBot"
+            href="https://web.telegram.org/k/#@AsliJobBot"
             target="_blank"
             rel="noreferrer"
-            className="hover:text-slate-300"
+            className="hover:text-slate-300 font-medium"
           >
             Telegram @AsliJobBot
           </a>

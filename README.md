@@ -7,6 +7,12 @@ their own language.
 > Hacker House Goa 2026 build, planned as a real product. *"AsliJob"* is a
 > working name.
 
+### Live Deployments & Channels
+- 🌐 **Web App**: [https://aslijob.vercel.app](https://aslijob.vercel.app)
+- 🤖 **Telegram Bot**: [@AsliJobBot](https://web.telegram.org/k/#@AsliJobBot) (Direct Web Client) or [t.me/AsliJobBot](https://t.me/AsliJobBot)
+- 💳 **College Placement Plan (Dodo Checkout)**: [https://aslijob.vercel.app/pricing](https://aslijob.vercel.app/pricing)
+- 📜 **Onchain EAS Letter Verification**: [https://aslijob.vercel.app/verify](https://aslijob.vercel.app/verify)
+
 Paste or share a message, screenshot, number, UPI ID or link and get a clear
 verdict — **Safe · Suspicious · Scam** — with the reasons behind it, backed by a
 shared fraud graph and company-issued offer-letter verification.
