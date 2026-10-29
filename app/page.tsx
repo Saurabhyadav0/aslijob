@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import GraphView from "@/components/GraphView";
 import { translations, type Language } from "@/lib/i18n";
 import type { CheckResult } from "@/lib/types";
 
@@ -429,6 +430,8 @@ export default function Home() {
             </div>
 
             {/* F4: Scam Network View */}
+            <GraphView graph={result.graph} centralLabel={directInput.slice(0, 10) || "Job Target"} />
+
             {(result.graph.confirmedLinks > 0 || result.graph.reportedCount > 0) && (
               <div className="rounded-xl border border-red-500/30 bg-red-950/20 p-3.5 space-y-1.5 text-xs text-red-200">
                 <div className="flex items-center gap-1.5 font-bold text-red-300">
@@ -505,20 +508,34 @@ export default function Home() {
         </section>
       )}
 
-      {/* Offer Letter Verification Banner */}
-      <footer className="rounded-2xl border border-slate-800/80 bg-slate-900/60 p-4 flex items-center justify-between">
-        <div>
-          <div className="text-xs font-bold text-slate-200">{t.letterVerifyTitle}</div>
-          <div className="text-[11px] text-slate-400">
-            Check onchain Base Sepolia attestation for TCS, Infosys & Wipro.
+      {/* Offer Letter Verification Banner & College Plan Link */}
+      <footer className="space-y-3">
+        <div className="rounded-2xl border border-slate-800/80 bg-slate-900/60 p-4 flex items-center justify-between">
+          <div>
+            <div className="text-xs font-bold text-slate-200">{t.letterVerifyTitle}</div>
+            <div className="text-[11px] text-slate-400">
+              Check onchain Base Sepolia attestation for TCS, Infosys & Wipro.
+            </div>
+          </div>
+          <Link
+            href="/verify"
+            className="rounded-lg border border-slate-700 bg-slate-800 px-3 py-1.5 text-xs font-medium text-slate-200 hover:bg-slate-700 transition"
+          >
+            {t.tabVerify} →
+          </Link>
+        </div>
+
+        <div className="flex items-center justify-between px-2 text-[11px] text-slate-500">
+          <span>Hacker House Goa 2026 build • AsliJob</span>
+          <div className="flex gap-3">
+            <Link href="/pricing" className="text-sky-400 hover:underline">
+              College Dashboard (Dodo)
+            </Link>
+            <Link href="/verify" className="hover:text-slate-300">
+              EAS Letter Verify
+            </Link>
           </div>
         </div>
-        <Link
-          href="/verify"
-          className="rounded-lg border border-slate-700 bg-slate-800 px-3 py-1.5 text-xs font-medium text-slate-200 hover:bg-slate-700 transition"
-        >
-          {t.tabVerify} →
-        </Link>
       </footer>
     </main>
   );

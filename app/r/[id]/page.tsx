@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getCheck } from "@/lib/store";
+import GraphView from "@/components/GraphView";
 
 export const dynamic = "force-dynamic";
 
@@ -87,6 +88,9 @@ export default function ResultPage({ params }: { params: { id: string } }) {
               ))}
             </ul>
           </div>
+
+          {/* Fraud graph visualization */}
+          <GraphView graph={check.graph} centralLabel={check.checkId.slice(0, 8)} />
 
           {/* Fraud graph links if present */}
           {(check.graph.confirmedLinks > 0 || check.graph.reportedCount > 0) && (

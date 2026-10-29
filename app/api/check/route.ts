@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { runCheck } from "@/lib/check";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 
@@ -19,6 +20,15 @@ const Body = z.object({
 });
 
 export async function POST(req: Request) {
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "127.0.0.1";
+  const rl = checkRateLimit(ip);
+  if (!rl.allowed) {
+    return NextResponse.json(
+      { error: { code: "rate_limited", message: "Too many checks. Please wait an hour before checking again." } },
+      { status: 429 },
+    );
+  }
+
   let json: unknown;
   try {
     json = await req.json();
