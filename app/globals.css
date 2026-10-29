@@ -3,9 +3,64 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: light;
+  color-scheme: dark;
+  --shadow-ring: 0 0 0 1px oklch(1 0 0 / 0.08);
+  --shadow-ring-hover: 0 0 0 1px oklch(1 0 0 / 0.14);
+  --shadow-card: 0 0 0 1px oklch(1 0 0 / 0.07), 0 4px 16px -2px oklch(0 0 0 / 0.4);
+  --shadow-glow-sky: 0 0 30px -5px oklch(0.7 0.15 230 / 0.18);
+  --shadow-glow-red: 0 0 30px -5px oklch(0.6 0.22 25 / 0.22);
+  --shadow-glow-emerald: 0 0 30px -5px oklch(0.7 0.17 150 / 0.2);
 }
 
 body {
-  @apply bg-gray-50 text-gray-900 antialiased;
+  @apply bg-slate-950 text-slate-100 antialiased selection:bg-sky-500/30 selection:text-sky-200;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Jakub Krehel Better-UI: Pressed scale to 0.96 over 150ms ease-out */
+.press-scale {
+  transform: translateZ(0);
+  transition-property: transform;
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+}
+@media (hover: hover) {
+  .press-scale:active:not(:disabled) {
+    transform: scale(0.96);
+  }
+}
+
+/* Concentric glassmorphic surfaces */
+.surface-glass {
+  background: radial-gradient(100% 100% at 50% 0%, oklch(0.22 0.04 260 / 0.6) 0%, oklch(0.15 0.03 260 / 0.8) 100%);
+  border: 1px solid oklch(1 0 0 / 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-card);
+}
+
+.surface-interactive {
+  border: 1px solid oklch(1 0 0 / 0.08);
+  box-shadow: var(--shadow-ring);
+  transition-property: border-color, box-shadow, background-color;
+  transition-duration: 150ms;
+  transition-timing-function: ease-out;
+}
+@media (hover: hover) {
+  .surface-interactive:hover {
+    border-color: oklch(1 0 0 / 0.15);
+    box-shadow: var(--shadow-ring-hover);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

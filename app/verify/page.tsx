@@ -34,19 +34,24 @@ export default function VerifyPage() {
   }
 
   return (
-    <div className="space-y-6 pb-12">
+    <div className="space-y-6 pb-20">
       {/* Header */}
-      <header className="flex items-center justify-between border-b border-slate-800/80 pb-3 pt-2">
-        <Link href="/" className="text-xl font-bold tracking-tight text-white">
-          Asli<span className="text-sky-400">Job</span>
+      <header className="flex items-center justify-between border-b border-white/[0.08] pb-3.5 pt-1">
+        <Link href="/" className="group flex items-center gap-2.5">
+          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-sky-400 to-blue-600 text-sm font-black text-slate-950 shadow-md shadow-sky-500/20 ring-1 ring-white/20">
+            A
+          </div>
+          <span className="text-xl font-bold tracking-tight text-white">
+            Asli<span className="text-sky-400">Job</span>
+          </span>
         </Link>
-        <div className="flex gap-1 text-xs">
+        <div className="flex items-center gap-1 rounded-xl border border-white/[0.08] bg-slate-900/90 p-1 text-xs">
           {(["en", "hi", "mr"] as Language[]).map((l) => (
             <button
               key={l}
               onClick={() => setLang(l)}
-              className={`rounded px-2 py-0.5 font-medium transition ${
-                lang === l ? "bg-sky-500 text-slate-950 font-bold" : "text-slate-400"
+              className={`rounded-lg px-2.5 py-1 font-semibold transition-colors duration-150 active:scale-95 ${
+                lang === l ? "bg-sky-500 text-slate-950 font-bold" : "text-slate-400 hover:text-slate-200"
               }`}
             >
               {l === "en" ? "EN" : l === "hi" ? "हिंदी" : "मराठी"}
@@ -56,129 +61,130 @@ export default function VerifyPage() {
       </header>
 
       {/* Title */}
-      <div className="space-y-1">
+      <div className="space-y-1.5 pt-1">
         <div className="flex items-center gap-2">
           <span className="text-2xl">📜</span>
-          <h1 className="text-2xl font-bold tracking-tight text-white">{t.letterVerifyTitle}</h1>
+          <h1 className="text-2xl font-black tracking-tight text-white sm:text-3xl">
+            {t.letterVerifyTitle}
+          </h1>
         </div>
-        <p className="text-xs text-slate-400">{t.letterVerifySubtitle}</p>
+        <p className="text-sm text-slate-400 leading-relaxed">{t.letterVerifySubtitle}</p>
       </div>
 
       {/* Input */}
-      <div className="space-y-2">
-        <div className="flex gap-2">
-          <input
-            type="text"
-            value={letterId}
-            onChange={(e) => setLetterId(e.target.value)}
-            placeholder={t.letterPlaceholder}
-            className="flex-1 rounded-xl border border-slate-800 bg-slate-900/90 p-3.5 text-sm text-slate-100 placeholder-slate-500 outline-none focus:border-sky-500 font-mono"
-          />
+      <div className="space-y-3">
+        <div className="flex flex-col sm:flex-row gap-2.5">
+          <div className="flex-1 rounded-2xl border border-white/[0.08] bg-slate-900/80 p-1 shadow-sm focus-within:border-sky-500/60 focus-within:ring-2 focus-within:ring-sky-500/20">
+            <input
+              type="text"
+              value={letterId}
+              onChange={(e) => setLetterId(e.target.value)}
+              placeholder={t.letterPlaceholder}
+              className="w-full bg-transparent p-3 text-sm text-slate-100 placeholder-slate-500 outline-none font-mono"
+            />
+          </div>
           <button
             onClick={() => handleVerify()}
             disabled={loading || !letterId.trim()}
-            className="rounded-xl bg-sky-500 px-5 text-sm font-bold text-slate-950 hover:bg-sky-400 transition disabled:opacity-40"
+            className="flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-sky-400 to-sky-500 px-6 py-3.5 text-xs font-bold text-slate-950 shadow-lg shadow-sky-500/20 transition-all duration-150 hover:from-sky-300 hover:to-sky-400 active:scale-[0.96] disabled:opacity-40"
           >
-            {loading ? "Checking..." : t.letterBtn}
+            <span>🔍</span>
+            <span>{loading ? "Checking EAS..." : "Verify Onchain"}</span>
           </button>
         </div>
 
-        {/* Demo shortcuts */}
-        <div className="flex items-center gap-2 text-xs text-slate-400">
-          <span>Demo letters:</span>
+        {/* Demo Chips */}
+        <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400 pt-0.5">
+          <span className="font-medium text-slate-500">Test authentic letters:</span>
           <button
             type="button"
             onClick={() => {
-              setLetterId("TCS-2026-ENG-089");
-              handleVerify("TCS-2026-ENG-089");
+              setLetterId("tcs-2026-4401");
+              handleVerify("tcs-2026-4401");
             }}
-            className="rounded-md border border-emerald-500/30 bg-emerald-950/30 px-2 py-0.5 text-emerald-300 hover:bg-emerald-950/60 transition"
+            className="rounded-lg border border-emerald-500/30 bg-emerald-950/30 px-2.5 py-1 text-emerald-300 font-mono text-[11px] hover:bg-emerald-950/60 transition-colors active:scale-95"
           >
-            TCS Offer Letter
+            tcs-2026-4401 (Valid TCS)
           </button>
           <button
             type="button"
             onClick={() => {
-              setLetterId("FAKE-LETTER-999");
-              handleVerify("FAKE-LETTER-999");
+              setLetterId("fake-infy-9999");
+              handleVerify("fake-infy-9999");
             }}
-            className="rounded-md border border-red-500/30 bg-red-950/30 px-2 py-0.5 text-red-300 hover:bg-red-950/60 transition"
+            className="rounded-lg border border-rose-500/30 bg-rose-950/30 px-2.5 py-1 text-rose-300 font-mono text-[11px] hover:bg-rose-950/60 transition-colors active:scale-95"
           >
-            Tampered Letter
+            fake-infy-9999 (Forged)
           </button>
         </div>
       </div>
 
       {error && (
-        <div className="rounded-xl border border-red-500/30 bg-red-950/30 p-3 text-xs text-red-300">
-          {error}
+        <div className="rounded-2xl border border-rose-500/30 bg-rose-950/30 p-4 text-xs font-medium text-rose-300">
+          ⚠️ {error}
         </div>
       )}
 
-      {/* Result Card */}
+      {/* Verification Result Banner */}
       {result && (
-        <div className="animate-fadeIn space-y-4">
+        <section className="space-y-4 pt-2">
           {result.valid ? (
-            <div className="rounded-2xl border border-emerald-500/40 bg-emerald-950/20 p-5 space-y-4">
-              <div className="flex items-center gap-3">
-                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-400 text-xl font-black border border-emerald-500/40">
+            <div className="rounded-3xl border border-emerald-500/30 bg-emerald-950/20 shadow-[0_0_30px_-5px_rgba(16,185,129,0.2)] p-6 space-y-4">
+              <div className="flex items-center gap-3.5">
+                <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-500/20 text-emerald-300 text-2xl font-black border border-emerald-500/30 shadow-sm">
                   ✓
                 </span>
                 <div>
-                  <div className="text-base font-bold text-emerald-300">
-                    {t.letterValid}
-                  </div>
-                  <div className="text-xs text-emerald-400/80">
-                    Onchain Base Sepolia EAS Attestation Confirmed
-                  </div>
+                  <h2 className="text-lg font-black text-emerald-200">
+                    {result.company ? `Verified by ${result.company}` : t.letterValid}
+                  </h2>
+                  <p className="text-xs text-emerald-400 font-medium">
+                    Anchored via Ethereum Attestation Service (EAS) on Base Sepolia
+                  </p>
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3 border-t border-emerald-900/40 pt-3 text-xs">
-                <div>
-                  <span className="text-slate-400">Company:</span>
-                  <p className="font-bold text-slate-200 text-sm">{result.company}</p>
+              <div className="space-y-2 border-t border-emerald-900/40 pt-4 text-xs">
+                <div className="flex justify-between py-1 border-b border-emerald-900/20">
+                  <span className="text-slate-400">Position / Role:</span>
+                  <span className="font-bold text-slate-100">{result.role}</span>
                 </div>
-                <div>
-                  <span className="text-slate-400">Designation / Role:</span>
-                  <p className="font-bold text-slate-200 text-sm">{result.role}</p>
+                <div className="flex justify-between py-1 border-b border-emerald-900/20">
+                  <span className="text-slate-400">Offer ID:</span>
+                  <span className="font-mono text-slate-100">{letterId}</span>
                 </div>
-                <div className="col-span-2">
-                  <span className="text-slate-400">EAS Attestation UID:</span>
-                  <p className="font-mono text-[11px] text-sky-400 truncate">
+                <div className="flex justify-between py-1 border-b border-emerald-900/20">
+                  <span className="text-slate-400">Issued On:</span>
+                  <span className="font-mono text-slate-100">{result.issuedAt}</span>
+                </div>
+                <div className="flex flex-col gap-1 py-1">
+                  <span className="text-slate-400">Base Sepolia EAS UID:</span>
+                  <code className="text-[11px] font-mono text-sky-400 break-all bg-slate-950/60 p-2 rounded-xl border border-white/5">
                     {result.easUid}
-                  </p>
+                  </code>
                 </div>
               </div>
             </div>
           ) : (
-            <div className="rounded-2xl border border-red-500/40 bg-red-950/20 p-5 space-y-3">
-              <div className="flex items-center gap-3">
-                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-red-500/20 text-red-400 text-xl font-black border border-red-500/40">
+            <div className="rounded-3xl border border-rose-500/30 bg-rose-950/20 shadow-[0_0_30px_-5px_rgba(244,63,94,0.2)] p-6 space-y-3">
+              <div className="flex items-center gap-3.5">
+                <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-rose-500/20 text-rose-300 text-2xl font-black border border-rose-500/30 shadow-sm">
                   ✕
                 </span>
                 <div>
-                  <div className="text-base font-bold text-red-300">
-                    {t.letterInvalid}
-                  </div>
-                  <div className="text-xs text-red-400/80">
-                    {result.reason ?? "No official record found in company registry"}
-                  </div>
+                  <h2 className="text-lg font-black text-rose-200">{t.letterInvalid}</h2>
+                  <p className="text-xs text-rose-400 font-medium">
+                    No matching EAS Merkle attestation registered on Base Sepolia.
+                  </p>
                 </div>
               </div>
-              <p className="text-xs text-slate-400 border-t border-red-900/40 pt-2">
-                ⚠️ Real companies in India (TCS, Infosys, Wipro, Accenture) issue offer letters directly from their career domains and do not demand payment.
+              <p className="text-xs text-slate-300 pt-1 leading-relaxed">
+                {result.reason ?? "This offer letter was never anchored by an authorized company recruiter key."}
               </p>
             </div>
           )}
-        </div>
+        </section>
       )}
-
-      <div className="pt-4 text-center">
-        <Link href="/" className="text-xs text-slate-400 hover:text-slate-200">
-          ← Back to Scam Checker
-        </Link>
-      </div>
     </div>
   );
 }

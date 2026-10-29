@@ -8,20 +8,23 @@ import type { CheckResult } from "@/lib/types";
 
 const STYLES = {
   safe: {
-    badge: "bg-emerald-500/20 text-emerald-400 border-emerald-500/40",
-    banner: "bg-emerald-950/40 border-emerald-500/30",
+    badge: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30",
+    banner: "bg-emerald-950/30 border-emerald-500/30",
+    glow: "shadow-[0_0_30px_-5px_rgba(16,185,129,0.18)]",
     icon: "✓",
     labelKey: "verdictSafe" as const,
   },
   suspicious: {
-    badge: "bg-amber-500/20 text-amber-400 border-amber-500/40",
-    banner: "bg-amber-950/40 border-amber-500/30",
+    badge: "bg-amber-500/15 text-amber-300 border-amber-500/30",
+    banner: "bg-amber-950/30 border-amber-500/30",
+    glow: "shadow-[0_0_30px_-5px_rgba(245,158,11,0.18)]",
     icon: "!",
     labelKey: "verdictSuspicious" as const,
   },
   scam: {
-    badge: "bg-red-500/20 text-red-400 border-red-500/40",
-    banner: "bg-red-950/40 border-red-500/30",
+    badge: "bg-rose-500/15 text-rose-300 border-rose-500/30",
+    banner: "bg-rose-950/30 border-rose-500/30",
+    glow: "shadow-[0_0_30px_-5px_rgba(244,63,94,0.22)]",
     icon: "✕",
     labelKey: "verdictScam" as const,
   },
@@ -147,11 +150,11 @@ export default function Home() {
   const s = result ? STYLES[result.verdict] : null;
 
   return (
-    <main className="space-y-6 pb-16">
-      {/* Top Header & Language Bar */}
-      <header className="flex items-center justify-between border-b border-slate-800/80 pb-3 pt-2">
-        <Link href="/" className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-sky-500 font-black text-slate-950">
+    <main className="space-y-6 pb-20">
+      {/* Top Header & Concentric Language Switcher */}
+      <header className="flex items-center justify-between border-b border-white/[0.08] pb-3.5 pt-1">
+        <Link href="/" className="group flex items-center gap-2.5">
+          <div className="relative flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-sky-400 to-blue-600 text-sm font-black text-slate-950 shadow-md shadow-sky-500/20 ring-1 ring-white/20 transition-transform duration-150 group-hover:scale-105">
             A
           </div>
           <span className="text-xl font-bold tracking-tight text-white">
@@ -159,14 +162,15 @@ export default function Home() {
           </span>
         </Link>
 
-        <div className="flex items-center gap-1 rounded-lg border border-slate-800 bg-slate-900/90 p-0.5 text-xs">
+        {/* Concentric Language Switcher */}
+        <div className="flex items-center gap-1 rounded-xl border border-white/[0.08] bg-slate-900/90 p-1 text-xs shadow-sm">
           {(["en", "hi", "mr"] as Language[]).map((l) => (
             <button
               key={l}
               onClick={() => setLang(l)}
-              className={`rounded px-2.5 py-1 font-medium transition ${
+              className={`rounded-lg px-2.5 py-1 font-semibold transition-colors duration-150 active:scale-95 ${
                 lang === l
-                  ? "bg-sky-500 text-slate-950 font-semibold"
+                  ? "bg-sky-500 text-slate-950 shadow-sm"
                   : "text-slate-400 hover:text-slate-200"
               }`}
             >
@@ -176,95 +180,104 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Live Counter & Scam Alert Strip */}
-      <section className="flex flex-col sm:flex-row gap-2 rounded-xl border border-slate-800/80 bg-slate-900/60 p-3 text-xs">
-        <div className="flex items-center gap-2 text-sky-400 font-medium">
-          <span className="inline-block h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-          <span>{t.bannerCount}</span>
+      {/* Live Counter & Alert Strip */}
+      <section className="flex flex-col sm:flex-row sm:items-center gap-2.5 rounded-2xl border border-white/[0.08] bg-slate-900/70 backdrop-blur-md p-3.5 text-xs shadow-sm">
+        <div className="flex items-center gap-2 text-sky-400 font-semibold tracking-wide">
+          <span className="relative flex h-2 w-2">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+          </span>
+          <span className="tabular-nums">{t.bannerCount}</span>
         </div>
-        <div className="hidden sm:inline text-slate-600">•</div>
+        <div className="hidden sm:inline text-slate-700">•</div>
         <div className="text-slate-400 truncate">
-          ⚠️ <span className="text-slate-300">{t.bannerAlert}</span>
+          ⚠️ <span className="text-slate-300 font-medium">{t.bannerAlert}</span>
         </div>
       </section>
 
-      {/* Main Title */}
-      <div className="space-y-1">
-        <h1 className="text-2xl font-extrabold tracking-tight text-slate-100 sm:text-3xl">
+      {/* Main Title & Value Proposition */}
+      <div className="space-y-1.5 pt-1">
+        <h1 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
           {t.title}
         </h1>
-        <p className="text-sm text-slate-400">{t.subtitle}</p>
+        <p className="text-sm text-slate-400 leading-relaxed">{t.subtitle}</p>
       </div>
 
-      {/* Input Mode Navigation Tabs */}
-      <div className="grid grid-cols-3 gap-1 rounded-xl border border-slate-800 bg-slate-900 p-1 text-xs font-medium">
+      {/* Concentric Mode Navigation Tabs (Outer R = Inner R + Padding) */}
+      <div className="grid grid-cols-3 gap-1 rounded-2xl border border-white/[0.08] bg-slate-900/90 p-1.5 text-xs font-semibold shadow-inner">
         <button
           onClick={() => {
             setTab("paste");
             setResult(null);
           }}
-          className={`rounded-lg py-2 transition ${
+          className={`flex items-center justify-center gap-1.5 rounded-xl py-2.5 transition-all duration-150 active:scale-[0.98] ${
             tab === "paste"
-              ? "bg-slate-800 text-white shadow-sm font-semibold"
-              : "text-slate-400 hover:text-slate-200"
+              ? "bg-slate-800 text-white shadow-sm ring-1 ring-white/10"
+              : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/40"
           }`}
         >
-          {t.tabPaste}
+          <span>📝</span>
+          <span>{t.tabPaste}</span>
         </button>
         <button
           onClick={() => {
             setTab("upload");
             setResult(null);
           }}
-          className={`rounded-lg py-2 transition ${
+          className={`flex items-center justify-center gap-1.5 rounded-xl py-2.5 transition-all duration-150 active:scale-[0.98] ${
             tab === "upload"
-              ? "bg-slate-800 text-white shadow-sm font-semibold"
-              : "text-slate-400 hover:text-slate-200"
+              ? "bg-slate-800 text-white shadow-sm ring-1 ring-white/10"
+              : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/40"
           }`}
         >
-          {t.tabUpload}
+          <span>📸</span>
+          <span>{t.tabUpload}</span>
         </button>
         <button
           onClick={() => {
             setTab("direct");
             setResult(null);
           }}
-          className={`rounded-lg py-2 transition ${
+          className={`flex items-center justify-center gap-1.5 rounded-xl py-2.5 transition-all duration-150 active:scale-[0.98] ${
             tab === "direct"
-              ? "bg-slate-800 text-white shadow-sm font-semibold"
-              : "text-slate-400 hover:text-slate-200"
+              ? "bg-slate-800 text-white shadow-sm ring-1 ring-white/10"
+              : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/40"
           }`}
         >
-          {t.tabDirect}
+          <span>🔍</span>
+          <span>{t.tabDirect}</span>
         </button>
       </div>
 
-      {/* Input Box based on Tab */}
-      <section className="space-y-3">
+      {/* Input Section */}
+      <section className="space-y-3.5">
         {tab === "paste" && (
-          <div className="space-y-2">
-            <textarea
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              placeholder={t.placeholderPaste}
-              className="h-36 w-full rounded-xl border border-slate-800 bg-slate-900/90 p-3.5 text-sm text-slate-100 placeholder-slate-500 outline-none transition focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
-            />
+          <div className="space-y-2.5">
+            <div className="relative rounded-2xl border border-white/[0.08] bg-slate-900/80 p-1 shadow-sm transition-all focus-within:border-sky-500/60 focus-within:ring-2 focus-within:ring-sky-500/20">
+              <textarea
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                placeholder={t.placeholderPaste}
+                rows={4}
+                className="w-full rounded-xl bg-transparent p-3 text-sm text-slate-100 placeholder-slate-500 outline-none resize-none"
+              />
+            </div>
             {/* Quick Demo Shortcuts */}
-            <div className="flex items-center gap-2 text-xs text-slate-400">
-              <span>Try sample:</span>
+            <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400 pt-0.5">
+              <span className="font-medium text-slate-500">Quick tests:</span>
               <button
                 type="button"
                 onClick={() => setText(SAMPLE_SCAM)}
-                className="rounded-md border border-red-500/30 bg-red-950/30 px-2 py-0.5 text-red-300 hover:bg-red-950/60 transition"
+                className="rounded-lg border border-rose-500/30 bg-rose-950/30 px-2.5 py-1 text-rose-300 font-medium hover:bg-rose-950/60 transition-colors active:scale-95"
               >
-                Fake Amazon WFH
+                🚨 Fake Amazon WFH
               </button>
               <button
                 type="button"
                 onClick={() => setText(SAMPLE_GENUINE)}
-                className="rounded-md border border-emerald-500/30 bg-emerald-950/30 px-2 py-0.5 text-emerald-300 hover:bg-emerald-950/60 transition"
+                className="rounded-lg border border-emerald-500/30 bg-emerald-950/30 px-2.5 py-1 text-emerald-300 font-medium hover:bg-emerald-950/60 transition-colors active:scale-95"
               >
-                Real Infosys Email
+                ✓ Real Infosys Email
               </button>
             </div>
           </div>
@@ -273,7 +286,7 @@ export default function Home() {
         {tab === "upload" && (
           <div
             onClick={() => fileInputRef.current?.click()}
-            className="flex h-36 w-full cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-slate-700 bg-slate-900/50 p-4 text-center transition hover:border-sky-500 hover:bg-slate-900"
+            className="group flex h-40 w-full cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-700 bg-slate-900/50 p-4 text-center transition-all duration-150 hover:border-sky-400 hover:bg-slate-900/80 active:scale-[0.99]"
           >
             <input
               ref={fileInputRef}
@@ -282,36 +295,42 @@ export default function Home() {
               className="hidden"
               onChange={handleFileUpload}
             />
-            <div className="text-2xl mb-1">📸</div>
-            <p className="text-sm font-medium text-slate-200">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-500/10 text-2xl text-sky-400 mb-2 transition-transform duration-150 group-hover:scale-110">
+              📷
+            </div>
+            <p className="text-sm font-semibold text-slate-200">
               {file ? file.name : t.btnUpload}
             </p>
-            <p className="text-xs text-slate-500 mt-0.5">PNG, JPG or PDF up to 5MB</p>
+            <p className="text-xs text-slate-500 mt-1">
+              Supports PNG, JPG screenshot or offer letter PDF (up to 5MB)
+            </p>
           </div>
         )}
 
         {tab === "direct" && (
-          <div className="space-y-2">
-            <input
-              type="text"
-              value={directInput}
-              onChange={(e) => setDirectInput(e.target.value)}
-              placeholder={t.placeholderDirect}
-              className="w-full rounded-xl border border-slate-800 bg-slate-900/90 p-3.5 text-sm text-slate-100 placeholder-slate-500 outline-none transition focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
-            />
-            <div className="flex items-center gap-2 text-xs text-slate-400">
-              <span>Try:</span>
+          <div className="space-y-2.5">
+            <div className="rounded-2xl border border-white/[0.08] bg-slate-900/80 p-1 shadow-sm transition-all focus-within:border-sky-500/60 focus-within:ring-2 focus-within:ring-sky-500/20">
+              <input
+                type="text"
+                value={directInput}
+                onChange={(e) => setDirectInput(e.target.value)}
+                placeholder={t.placeholderDirect}
+                className="w-full rounded-xl bg-transparent p-3 text-sm text-slate-100 placeholder-slate-500 outline-none font-mono"
+              />
+            </div>
+            <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400 pt-0.5">
+              <span className="font-medium text-slate-500">Try sample:</span>
               <button
                 type="button"
                 onClick={() => setDirectInput("9876543210")}
-                className="rounded-md border border-slate-700 bg-slate-800 px-2 py-0.5 text-slate-300 hover:bg-slate-700 transition"
+                className="rounded-lg border border-slate-700 bg-slate-800/80 px-2.5 py-1 text-slate-300 font-mono hover:bg-slate-700 transition-colors active:scale-95"
               >
                 9876543210
               </button>
               <button
                 type="button"
                 onClick={() => setDirectInput("fraud.recruiter@okhdfc")}
-                className="rounded-md border border-slate-700 bg-slate-800 px-2 py-0.5 text-slate-300 hover:bg-slate-700 transition"
+                className="rounded-lg border border-slate-700 bg-slate-800/80 px-2.5 py-1 text-slate-300 font-mono hover:bg-slate-700 transition-colors active:scale-95"
               >
                 fraud.recruiter@okhdfc
               </button>
@@ -319,30 +338,35 @@ export default function Home() {
           </div>
         )}
 
-        {/* Primary Action Button */}
+        {/* Primary Action Button (Jakub Krehel press-scale) */}
         {tab !== "upload" && (
           <button
             onClick={() => handleCheck()}
             disabled={loading || (tab === "paste" ? !text.trim() : !directInput.trim())}
-            className="w-full rounded-xl bg-sky-500 py-3.5 text-sm font-bold text-slate-950 transition hover:bg-sky-400 disabled:opacity-40"
+            className="group relative flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-sky-400 to-sky-500 py-3.5 pe-4 ps-3.5 text-sm font-bold text-slate-950 shadow-lg shadow-sky-500/20 transition-all duration-150 hover:from-sky-300 hover:to-sky-400 active:scale-[0.96] disabled:opacity-40 disabled:cursor-not-allowed"
           >
-            {loading ? t.btnChecking : t.btnCheck}
+            <span>{loading ? "⚡" : "🛡️"}</span>
+            <span>{loading ? t.btnChecking : t.btnCheck}</span>
           </button>
         )}
       </section>
 
-      {/* Error Message */}
+      {/* Error Banner */}
       {error && (
-        <div className="rounded-xl border border-red-500/30 bg-red-950/30 p-3.5 text-xs text-red-300">
-          {error}
+        <div className="rounded-2xl border border-rose-500/30 bg-rose-950/30 p-4 text-xs font-medium text-rose-300 flex items-center gap-2.5">
+          <span>⚠️</span>
+          <span>{error}</span>
         </div>
       )}
 
-      {/* F2: Checking Progression Steps */}
+      {/* Progression Steps */}
       {loading && (
-        <section className="rounded-2xl border border-slate-800 bg-slate-900/80 p-5 space-y-3">
-          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-sky-400">
-            <span className="inline-block h-2 w-2 rounded-full bg-sky-400 animate-ping" />
+        <section className="rounded-2xl border border-white/[0.08] bg-slate-900/80 p-5 space-y-3.5 shadow-md">
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-sky-400">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-sky-400" />
+            </span>
             <span>Analyzing message signals...</span>
           </div>
           <div className="space-y-2.5 text-xs">
@@ -353,20 +377,20 @@ export default function Home() {
               return (
                 <div
                   key={idx}
-                  className={`flex items-center gap-2.5 transition-all ${
+                  className={`flex items-center gap-2.5 transition-all duration-150 ${
                     isDone
-                      ? "text-emerald-400 font-medium"
+                      ? "text-emerald-300 font-semibold"
                       : isActive
                       ? "text-sky-300 font-medium"
-                      : "text-slate-600"
+                      : "text-slate-500"
                   }`}
                 >
                   <span
-                    className={`flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-bold ${
+                    className={`flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold tabular-nums transition-colors duration-150 ${
                       isDone
-                        ? "bg-emerald-500/20 text-emerald-400"
+                        ? "bg-emerald-500/20 text-emerald-300 ring-1 ring-emerald-500/40"
                         : isActive
-                        ? "bg-sky-500/20 text-sky-400 animate-pulse"
+                        ? "bg-sky-500/20 text-sky-300 ring-1 ring-sky-500/40 animate-pulse"
                         : "bg-slate-800 text-slate-500"
                     }`}
                   >
@@ -380,47 +404,47 @@ export default function Home() {
         </section>
       )}
 
-      {/* F3: Verdict Result Card */}
+      {/* Verdict Result Card */}
       {result && s && !loading && (
-        <section className="space-y-4">
+        <section className="space-y-4 pt-1">
           <div
-            className={`rounded-2xl border ${s.banner} p-5 space-y-4 transition-all animate-fadeIn`}
+            className={`rounded-3xl border ${s.banner} ${s.glow} p-6 space-y-5 transition-all`}
           >
             {/* Header: Icon + Word + Confidence */}
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3.5">
                 <span
-                  className={`flex h-11 w-11 items-center justify-center rounded-xl text-xl font-black border ${s.badge}`}
+                  className={`flex h-12 w-12 items-center justify-center rounded-2xl text-2xl font-black border ${s.badge} shadow-sm`}
                 >
                   {s.icon}
                 </span>
                 <div>
-                  <div className="text-xl font-extrabold uppercase tracking-wide text-slate-100">
+                  <div className="text-2xl font-black uppercase tracking-wide text-white">
                     {t[s.labelKey]}
                   </div>
-                  <div className="text-xs text-slate-400">
+                  <div className="text-xs font-semibold text-slate-400 tabular-nums">
                     {Math.round(result.confidence * 100)}% confidence
                   </div>
                 </div>
               </div>
 
               {result.cached && (
-                <span className="rounded-full border border-slate-700 bg-slate-800 px-2 py-0.5 text-[10px] font-medium text-slate-300">
-                  Cached
+                <span className="rounded-full border border-white/10 bg-slate-800 px-3 py-1 text-[11px] font-semibold text-slate-300 shadow-sm">
+                  ⚡ Cached
                 </span>
               )}
             </div>
 
             {/* Reasons List */}
-            <div className="space-y-2 border-t border-slate-800/80 pt-3">
-              <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+            <div className="space-y-2.5 border-t border-white/[0.08] pt-4">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">
                 {t.reasonsTitle}
               </h3>
               <ul className="space-y-2">
                 {result.reasons.map((r, i) => (
                   <li
                     key={i}
-                    className="flex items-start gap-2.5 rounded-lg border border-slate-800/80 bg-slate-900/80 p-3 text-xs text-slate-200"
+                    className="flex items-start gap-3 rounded-xl border border-white/[0.06] bg-slate-900/80 p-3.5 text-xs text-slate-200 leading-relaxed shadow-sm"
                   >
                     <span className="text-sky-400 font-bold mt-0.5">•</span>
                     <span>{r.text}</span>
@@ -429,23 +453,23 @@ export default function Home() {
               </ul>
             </div>
 
-            {/* F4: Scam Network View */}
-            <GraphView graph={result.graph} centralLabel={directInput.slice(0, 10) || "Job Target"} />
+            {/* Scam Network Graph View */}
+            <GraphView graph={result.graph} centralLabel={directInput.slice(0, 10) || "Target"} />
 
             {(result.graph.confirmedLinks > 0 || result.graph.reportedCount > 0) && (
-              <div className="rounded-xl border border-red-500/30 bg-red-950/20 p-3.5 space-y-1.5 text-xs text-red-200">
-                <div className="flex items-center gap-1.5 font-bold text-red-300">
+              <div className="rounded-2xl border border-rose-500/30 bg-rose-950/20 p-4 space-y-2 text-xs text-rose-200 shadow-sm">
+                <div className="flex items-center gap-2 font-bold text-rose-300">
                   <span>🕸️</span>
                   <span>{t.networkTitle}</span>
                 </div>
-                <p>
+                <p className="leading-relaxed">
                   {t.networkLinked(
                     result.graph.confirmedLinks || result.graph.reportedCount,
                     result.graph.cities || 1
                   )}
                 </p>
                 {result.graph.path.length > 0 && (
-                  <div className="mt-1 text-[11px] text-red-300/80 truncate">
+                  <div className="mt-1 text-[11px] font-mono text-rose-300/80 truncate">
                     Trail: {result.graph.path.join(" → ")}
                   </div>
                 )}
@@ -453,29 +477,27 @@ export default function Home() {
             )}
 
             {/* Next Step Guidance */}
-            <div className="rounded-xl border border-slate-800 bg-slate-900/90 p-3 text-xs font-medium text-sky-300">
+            <div className="rounded-2xl border border-sky-500/30 bg-sky-950/30 p-4 text-xs font-semibold text-sky-200 leading-relaxed shadow-sm">
               👉 {result.nextStep}
             </div>
 
             {/* Action Buttons Toolbar */}
-            <div className="flex flex-col sm:flex-row gap-2 pt-1">
-              {/* WhatsApp Share Button */}
+            <div className="flex flex-col sm:flex-row gap-2.5 pt-1">
               <a
                 href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
                   `⚠️ AsliJob Scam Check Alert: ${result.reasons[0]?.text ?? "Suspicious offer"}. Details: ${result.shareUrl}?ref=wa`
                 )}`}
                 target="_blank"
                 rel="noreferrer"
-                className="flex-1 text-center rounded-xl bg-emerald-600 hover:bg-emerald-500 py-2.5 text-xs font-bold text-white transition flex items-center justify-center gap-1.5"
+                className="flex-1 text-center rounded-2xl bg-emerald-600 hover:bg-emerald-500 py-3 text-xs font-bold text-white transition-all duration-150 active:scale-[0.96] shadow-sm flex items-center justify-center gap-2"
               >
                 <span>💬</span>
                 <span>{t.btnShare}</span>
               </a>
 
-              {/* Report Button */}
               <Link
                 href={`/report?checkId=${result.checkId}`}
-                className="flex-1 text-center rounded-xl bg-red-600 hover:bg-red-500 py-2.5 text-xs font-bold text-white transition flex items-center justify-center gap-1.5"
+                className="flex-1 text-center rounded-2xl bg-rose-600 hover:bg-rose-500 py-3 text-xs font-bold text-white transition-all duration-150 active:scale-[0.96] shadow-sm flex items-center justify-center gap-2"
               >
                 <span>🚨</span>
                 <span>{t.btnReport}</span>
@@ -483,12 +505,12 @@ export default function Home() {
             </div>
 
             {/* Share Card & Link Row */}
-            <div className="flex items-center justify-between text-xs text-slate-400 pt-1">
+            <div className="flex items-center justify-between text-xs text-slate-400 pt-2 border-t border-white/[0.06]">
               <a
                 href={`/api/share/${result.checkId}`}
                 target="_blank"
                 rel="noreferrer"
-                className="text-sky-400 hover:underline"
+                className="text-sky-400 hover:underline font-medium"
               >
                 🖼️ View Warning Image Card
               </a>
@@ -499,7 +521,7 @@ export default function Home() {
                   setCopied(true);
                   setTimeout(() => setCopied(false), 2000);
                 }}
-                className="text-slate-400 hover:text-slate-200"
+                className="text-slate-400 hover:text-slate-200 transition-colors font-medium active:scale-95"
               >
                 {copied ? t.copied : "🔗 Copy Result Link"}
               </button>
@@ -509,29 +531,29 @@ export default function Home() {
       )}
 
       {/* Offer Letter Verification Banner & College Plan Link */}
-      <footer className="space-y-3">
-        <div className="rounded-2xl border border-slate-800/80 bg-slate-900/60 p-4 flex items-center justify-between">
+      <footer className="space-y-4 pt-2">
+        <div className="rounded-3xl border border-white/[0.08] bg-slate-900/60 p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm">
           <div>
             <div className="text-xs font-bold text-slate-200">{t.letterVerifyTitle}</div>
-            <div className="text-[11px] text-slate-400">
-              Check onchain Base Sepolia attestation for TCS, Infosys & Wipro.
+            <div className="text-[11px] text-slate-400 mt-0.5">
+              Check onchain Base Sepolia EAS attestation for TCS, Infosys & Wipro.
             </div>
           </div>
           <Link
             href="/verify"
-            className="rounded-lg border border-slate-700 bg-slate-800 px-3 py-1.5 text-xs font-medium text-slate-200 hover:bg-slate-700 transition"
+            className="rounded-xl border border-white/10 bg-slate-800 px-4 py-2 text-xs font-semibold text-slate-200 hover:bg-slate-700 transition-all duration-150 active:scale-95 text-center shadow-sm"
           >
             {t.tabVerify} →
           </Link>
         </div>
 
-        <div className="flex items-center justify-between px-2 text-[11px] text-slate-500">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-2 px-2 text-[11px] text-slate-500">
           <span>Hacker House Goa 2026 build • AsliJob</span>
-          <div className="flex gap-3">
-            <Link href="/pricing" className="text-sky-400 hover:underline">
+          <div className="flex gap-4">
+            <Link href="/pricing" className="text-sky-400 hover:underline font-medium">
               College Dashboard (Dodo)
             </Link>
-            <Link href="/verify" className="hover:text-slate-300">
+            <Link href="/verify" className="hover:text-slate-300 font-medium">
               EAS Letter Verify
             </Link>
           </div>

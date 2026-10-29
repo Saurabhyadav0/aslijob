@@ -38,140 +38,170 @@ function PricingContent() {
   }
 
   return (
-    <main className="space-y-8 py-8 pb-16">
+    <main className="space-y-8 py-4 pb-20">
       {/* Header */}
-      <header className="flex items-center justify-between border-b border-slate-800/80 pb-3">
-        <Link href="/" className="text-xl font-bold tracking-tight text-white">
-          Asli<span className="text-sky-400">Job</span>
+      <header className="flex items-center justify-between border-b border-white/[0.08] pb-3.5">
+        <Link href="/" className="group flex items-center gap-2.5">
+          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-sky-400 to-blue-600 text-sm font-black text-slate-950 shadow-md shadow-sky-500/20 ring-1 ring-white/20">
+            A
+          </div>
+          <span className="text-xl font-bold tracking-tight text-white">
+            Asli<span className="text-sky-400">Job</span>
+          </span>
         </Link>
-        <span className="text-xs uppercase tracking-wider text-slate-400">
-          Campus & Enterprise Plans
+        <span className="text-xs uppercase tracking-wider font-semibold text-slate-400">
+          Campus & Enterprise
         </span>
       </header>
 
-      {/* Success Banner */}
+      {/* Payment Success Notification */}
       {isSuccess && (
-        <div className="rounded-2xl border border-emerald-500/40 bg-emerald-950/40 p-4 text-center text-xs text-emerald-300">
-          🎉 <strong>Payment Successful via Dodo!</strong> Your college placement cohort protection plan is now active.
+        <div className="rounded-3xl border border-emerald-500/40 bg-emerald-950/40 p-5 text-center text-xs text-emerald-200 shadow-[0_0_30px_-5px_rgba(16,185,129,0.2)]">
+          🎉 <strong>Payment Successful via Dodo!</strong> Your college cohort protection plan is now active. Check your email for API keys.
         </div>
       )}
 
-      {/* Hero */}
-      <div className="space-y-2 text-center">
-        <span className="rounded-full border border-sky-500/30 bg-sky-950/40 px-3 py-1 text-xs font-semibold text-sky-400">
-          For TPOs & Placement Cells
+      {/* Hero Section */}
+      <div className="space-y-3 text-center pt-2">
+        <span className="inline-flex items-center gap-1.5 rounded-full border border-sky-500/30 bg-sky-950/50 px-3.5 py-1 text-xs font-bold text-sky-400 shadow-sm">
+          <span>🎓</span> For TPOs & College Placement Cells
         </span>
-        <h1 className="text-3xl font-extrabold text-white">
+        <h1 className="text-3xl font-black tracking-tight text-white sm:text-4xl">
           Protect Your Entire Batch From Job Fraud
         </h1>
-        <p className="text-sm text-slate-400 max-w-md mx-auto">
-          Scammers steal ₹15,000 to ₹60,000 from freshers in fake registration and laptop deposits. Keep your campus safe.
+        <p className="text-sm text-slate-400 max-w-md mx-auto leading-relaxed">
+          Fraud rings target freshers with fake offer letters and ₹2,500–₹25,000 upfront fees. Empower your campus with real-time scam immunity.
         </p>
       </div>
 
       {/* Plans Comparison */}
-      <div className="grid gap-6 sm:grid-cols-2">
+      <div className="grid gap-6 sm:grid-cols-2 pt-2">
         {/* Job Seeker Plan (Free) */}
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 space-y-5">
-          <div>
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Job Seekers & Freshers</span>
-            <div className="mt-2 text-3xl font-extrabold text-white">₹0 <span className="text-xs font-normal text-slate-400">/ forever</span></div>
-            <p className="mt-1 text-xs text-slate-400">For students checking suspicious job offers before paying.</p>
-          </div>
+        <div className="rounded-3xl border border-white/[0.08] bg-slate-900/70 backdrop-blur-md p-6 space-y-5 shadow-lg flex flex-col justify-between">
+          <div className="space-y-4">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                Job Seekers & Students
+              </span>
+              <div className="mt-2 text-3xl font-black text-white">
+                ₹0 <span className="text-xs font-normal text-slate-400">/ forever free</span>
+              </div>
+              <p className="mt-1 text-xs text-slate-400 leading-relaxed">
+                For individual freshers verifying WhatsApp offers, recruiter numbers, and UPI handles.
+              </p>
+            </div>
 
-          <ul className="space-y-2.5 text-xs text-slate-300 border-t border-slate-800 pt-4">
-            <li className="flex items-center gap-2">
-              <span className="text-emerald-400">✓</span> Unlimited text & message checks
-            </li>
-            <li className="flex items-center gap-2">
-              <span className="text-emerald-400">✓</span> Screenshot & PDF offer letter OCR
-            </li>
-            <li className="flex items-center gap-2">
-              <span className="text-emerald-400">✓</span> 1930 Cybercrime complaint draft
-            </li>
-            <li className="flex items-center gap-2">
-              <span className="text-emerald-400">✓</span> 2-hop scam network graph lookup
-            </li>
-            <li className="flex items-center gap-2">
-              <span className="text-emerald-400">✓</span> WhatsApp warning card generator
-            </li>
-          </ul>
+            <ul className="space-y-2.5 text-xs text-slate-300 border-t border-white/[0.08] pt-4">
+              <li className="flex items-center gap-2.5">
+                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-bold">✓</span>
+                <span>Unlimited text & WhatsApp message checks</span>
+              </li>
+              <li className="flex items-center gap-2.5">
+                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-bold">✓</span>
+                <span>Offer letter PDF & screenshot OCR</span>
+              </li>
+              <li className="flex items-center gap-2.5">
+                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-bold">✓</span>
+                <span>1-tap 1930 Cybercrime complaint draft</span>
+              </li>
+              <li className="flex items-center gap-2.5">
+                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-bold">✓</span>
+                <span>2-hop fraud graph cluster lookup</span>
+              </li>
+              <li className="flex items-center gap-2.5">
+                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-bold">✓</span>
+                <span>Telegram bot access (@AsliJobBot)</span>
+              </li>
+            </ul>
+          </div>
 
           <Link
             href="/"
-            className="block w-full rounded-xl border border-slate-700 bg-slate-800 py-3 text-center text-xs font-bold text-white hover:bg-slate-700 transition"
+            className="block w-full text-center rounded-2xl border border-white/10 bg-slate-800 py-3 text-xs font-bold text-white transition-all duration-150 hover:bg-slate-700 active:scale-[0.96] shadow-sm"
           >
             Use Free Checker
           </Link>
         </div>
 
-        {/* College Batch Plan (Paid) */}
-        <div className="relative rounded-2xl border-2 border-sky-500 bg-gradient-to-b from-sky-950/30 to-slate-900/90 p-6 space-y-5">
-          <div className="absolute -top-3 right-4 rounded-full bg-sky-500 px-3 py-0.5 text-[10px] font-bold text-slate-950">
-            POPULAR FOR COLLEGES
+        {/* Campus Placement Protection Plan (Paid via Dodo) */}
+        <div className="relative rounded-3xl border-2 border-sky-500/50 bg-gradient-to-b from-slate-900/90 to-slate-950 p-6 space-y-5 shadow-xl shadow-sky-500/10 flex flex-col justify-between">
+          <div className="absolute -top-3 right-6 rounded-full bg-gradient-to-r from-sky-400 to-blue-500 px-3 py-0.5 text-[10px] font-black uppercase tracking-wider text-slate-950 shadow-sm">
+            Institutional
           </div>
 
-          <div>
-            <span className="text-xs font-bold uppercase tracking-wider text-sky-400">Campus Batch Protection</span>
-            <div className="mt-2 text-3xl font-extrabold text-white">
-              ₹29 <span className="text-xs font-normal text-slate-400">/ student / year</span>
+          <div className="space-y-4">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-wider text-sky-400">
+                College Batch Protection Plan
+              </span>
+              <div className="mt-2 flex items-baseline gap-2">
+                <div className="text-3xl font-black text-white tabular-nums">
+                  ₹{annualTotal}
+                </div>
+                <span className="text-xs text-slate-400 font-medium">/ year + tax</span>
+              </div>
+              <p className="mt-1 text-xs text-slate-400">
+                ₹{pricePerStudent}/student/year for institutional coverage.
+              </p>
             </div>
-            <p className="mt-1 text-xs text-slate-400">Placement cell protection & real-time syndicate tracking.</p>
+
+            {/* Interactive Student Slider */}
+            <div className="rounded-2xl border border-white/[0.08] bg-slate-950/60 p-4 space-y-2.5 shadow-inner">
+              <div className="flex items-center justify-between text-xs font-bold">
+                <span className="text-slate-300">Cohort Batch Size:</span>
+                <span className="text-sky-400 tabular-nums">{studentCount} Students</span>
+              </div>
+              <input
+                type="range"
+                min="100"
+                max="5000"
+                step="50"
+                value={studentCount}
+                onChange={(e) => setStudentCount(Number(e.target.value))}
+                className="w-full accent-sky-400 cursor-pointer"
+              />
+              <div className="flex justify-between text-[10px] font-medium text-slate-500">
+                <span>100</span>
+                <span>1,000</span>
+                <span>2,500</span>
+                <span>5,000</span>
+              </div>
+            </div>
+
+            <ul className="space-y-2.5 text-xs text-slate-300 border-t border-white/[0.08] pt-4">
+              <li className="flex items-center gap-2.5">
+                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-sky-500/20 text-sky-300 text-[10px] font-bold">✓</span>
+                <span>Campus-wide placement officer dashboard</span>
+              </li>
+              <li className="flex items-center gap-2.5">
+                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-sky-500/20 text-sky-300 text-[10px] font-bold">✓</span>
+                <span>Early threat radar for gangs targeting your college</span>
+              </li>
+              <li className="flex items-center gap-2.5">
+                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-sky-500/20 text-sky-300 text-[10px] font-bold">✓</span>
+                <span>1-click broadcast warnings to all placed students</span>
+              </li>
+              <li className="flex items-center gap-2.5">
+                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-sky-500/20 text-sky-300 text-[10px] font-bold">✓</span>
+                <span>Direct EAS onchain offer-letter issuing badges</span>
+              </li>
+              <li className="flex items-center gap-2.5">
+                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-sky-500/20 text-sky-300 text-[10px] font-bold">✓</span>
+                <span>Priority 1930 Cybercrime escalation desk</span>
+              </li>
+            </ul>
           </div>
 
-          {/* Student Batch Slider */}
-          <div className="rounded-xl border border-sky-900/50 bg-slate-950/60 p-3.5 space-y-2">
-            <div className="flex justify-between text-xs text-slate-300">
-              <span>Graduating Batch Size:</span>
-              <span className="font-bold text-sky-400">{studentCount} Students</span>
-            </div>
-            <input
-              type="range"
-              min="100"
-              max="5000"
-              step="100"
-              value={studentCount}
-              onChange={(e) => setStudentCount(Number(e.target.value))}
-              className="w-full accent-sky-500"
-            />
-            <div className="flex justify-between border-t border-slate-800 pt-1 text-[11px] text-slate-400">
-              <span>Estimated Annual Plan:</span>
-              <span className="font-bold text-emerald-400">₹{annualTotal} / year</span>
-            </div>
-          </div>
-
-          <ul className="space-y-2.5 text-xs text-slate-300 border-t border-sky-900/40 pt-4">
-            <li className="flex items-center gap-2">
-              <span className="text-sky-400">✓</span> Real-time campus fraud alerts (viaSocket)
-            </li>
-            <li className="flex items-center gap-2">
-              <span className="text-sky-400">✓</span> Student scam report dashboard & gang tracking
-            </li>
-            <li className="flex items-center gap-2">
-              <span className="text-sky-400">✓</span> 1-click batch WhatsApp alert broadcasts
-            </li>
-            <li className="flex items-center gap-2">
-              <span className="text-sky-400">✓</span> Verified recruiter domain whitelist
-            </li>
-            <li className="flex items-center gap-2">
-              <span className="text-sky-400">✓</span> Dedicated TPO support & weekly report
-            </li>
-          </ul>
-
+          {/* Checkout CTA */}
           <button
             onClick={handleCheckout}
             disabled={loading}
-            className="block w-full rounded-xl bg-sky-500 py-3 text-center text-xs font-bold text-slate-950 hover:bg-sky-400 transition disabled:opacity-50"
+            className="group relative flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-sky-400 to-sky-500 py-3.5 pe-4 ps-3.5 text-xs font-extrabold text-slate-950 shadow-lg shadow-sky-500/20 transition-all duration-150 hover:from-sky-300 hover:to-sky-400 active:scale-[0.96] disabled:opacity-50"
           >
-            {loading ? "Opening Dodo Checkout..." : "Protect My Batch (Pay via Dodo)"}
+            <span>💳</span>
+            <span>{loading ? "Preparing Checkout..." : "Proceed to Dodo Payments"}</span>
           </button>
         </div>
-      </div>
-
-      <div className="pt-4 text-center">
-        <Link href="/" className="text-xs text-slate-400 hover:text-slate-200">
-          ← Back to Scam Checker
-        </Link>
       </div>
     </main>
   );
@@ -179,7 +209,7 @@ function PricingContent() {
 
 export default function PricingPage() {
   return (
-    <Suspense fallback={<div className="p-8 text-center text-slate-400">Loading plans...</div>}>
+    <Suspense fallback={<div className="p-8 text-center text-xs text-slate-400">Loading plan details...</div>}>
       <PricingContent />
     </Suspense>
   );

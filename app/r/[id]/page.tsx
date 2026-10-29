@@ -10,14 +10,15 @@ export default function ResultPage({ params }: { params: { id: string } }) {
   if (!check) {
     return (
       <main className="min-h-screen bg-slate-950 text-slate-100 flex flex-col items-center justify-center p-6">
-        <div className="max-w-md w-full bg-slate-900 border border-slate-800 rounded-2xl p-8 text-center">
-          <h1 className="text-2xl font-bold mb-2">Check Not Found</h1>
-          <p className="text-slate-400 mb-6">
-            This scam report or check may have expired or is not stored in memory.
+        <div className="max-w-md w-full bg-slate-900/80 border border-white/[0.08] rounded-3xl p-8 text-center space-y-4 shadow-xl">
+          <div className="text-3xl">🔍</div>
+          <h1 className="text-xl font-bold text-white">Check Record Not Found</h1>
+          <p className="text-xs text-slate-400 leading-relaxed">
+            This verification link may have expired or is not stored in active memory.
           </p>
           <Link
             href="/"
-            className="inline-block px-5 py-2.5 rounded-lg bg-sky-500 hover:bg-sky-400 font-medium text-slate-950 transition"
+            className="inline-block px-5 py-3 rounded-2xl bg-sky-500 hover:bg-sky-400 font-bold text-xs text-slate-950 transition-all duration-150 active:scale-95 shadow-md shadow-sky-500/20"
           >
             Check a new offer
           </Link>
@@ -26,117 +27,105 @@ export default function ResultPage({ params }: { params: { id: string } }) {
     );
   }
 
-  const badgeColors: Record<string, string> = {
-    scam: "bg-red-500/10 text-red-400 border-red-500/30",
-    suspicious: "bg-amber-500/10 text-amber-400 border-amber-500/30",
-    safe: "bg-emerald-500/10 text-emerald-400 border-emerald-500/30",
+  const badgeColors: Record<string, { badge: string; banner: string; glow: string; icon: string }> = {
+    scam: {
+      badge: "bg-rose-500/20 text-rose-300 border-rose-500/40",
+      banner: "bg-rose-950/30 border-rose-500/30",
+      glow: "shadow-[0_0_30px_-5px_rgba(244,63,94,0.2)]",
+      icon: "✕",
+    },
+    suspicious: {
+      badge: "bg-amber-500/20 text-amber-300 border-amber-500/40",
+      banner: "bg-amber-950/30 border-amber-500/30",
+      glow: "shadow-[0_0_30px_-5px_rgba(245,158,11,0.2)]",
+      icon: "!",
+    },
+    safe: {
+      badge: "bg-emerald-500/20 text-emerald-300 border-emerald-500/40",
+      banner: "bg-emerald-950/30 border-emerald-500/30",
+      glow: "shadow-[0_0_30px_-5px_rgba(16,185,129,0.2)]",
+      icon: "✓",
+    },
   };
+
+  const style = badgeColors[check.verdict] ?? badgeColors.suspicious;
 
   return (
     <main className="min-h-screen bg-slate-950 text-slate-100 p-4 sm:p-6 flex flex-col items-center">
       <div className="max-w-xl w-full my-6 space-y-6">
         {/* Brand */}
-        <div className="flex items-center justify-between border-b border-slate-800/80 pb-3">
-          <Link href="/" className="text-xl font-bold tracking-tight text-white">
-            Asli<span className="text-sky-400">Job</span>
+        <header className="flex items-center justify-between border-b border-white/[0.08] pb-3.5">
+          <Link href="/" className="group flex items-center gap-2.5">
+            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-sky-400 to-blue-600 text-sm font-black text-slate-950 shadow-md shadow-sky-500/20 ring-1 ring-white/20">
+              A
+            </div>
+            <span className="text-xl font-bold tracking-tight text-white">
+              Asli<span className="text-sky-400">Job</span>
+            </span>
           </Link>
-          <span className="text-xs uppercase tracking-wider text-slate-400">
+          <span className="text-xs uppercase tracking-wider font-semibold text-slate-400">
             Scam Risk Assessment
           </span>
-        </div>
+        </header>
 
         {/* Verdict Box */}
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-5">
+        <div className={`rounded-3xl border ${style.banner} ${style.glow} p-6 sm:p-8 space-y-6 shadow-xl`}>
           <div className="flex items-center justify-between">
             <span
-              className={`px-3.5 py-1 text-sm font-semibold uppercase tracking-wider border rounded-full ${
-                badgeColors[check.verdict] ?? "bg-slate-800 text-slate-200"
-              }`}
+              className={`px-4 py-1.5 text-xs font-black uppercase tracking-wider border rounded-full ${style.badge}`}
             >
               {check.verdict}
             </span>
-            <span className="text-xs text-slate-400">
+            <span className="text-xs font-bold text-slate-400 tabular-nums">
               Confidence: {Math.round(check.confidence * 100)}%
             </span>
           </div>
 
-          <div>
-            <h2 className="text-2xl font-bold text-slate-100">
-              {check.verdict === "scam"
-                ? "🚨 Confirmed Scam Signal"
-                : check.verdict === "suspicious"
-                ? "⚠️ Suspicious Signals Detected"
-                : "✅ No Red Flags Found"}
+          <div className="space-y-3">
+            <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400">
+              Key Fraud Signals Detected
             </h2>
-            <p className="mt-1.5 text-slate-400 text-sm">{check.nextStep}</p>
-          </div>
-
-          {/* Reasons */}
-          <div className="space-y-2 border-t border-slate-800/80 pt-4">
-            <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-              Reasons & Red Flags
-            </h3>
             <ul className="space-y-2">
               {check.reasons.map((r, i) => (
                 <li
                   key={i}
-                  className="text-sm bg-slate-950/60 border border-slate-800 rounded-lg p-3 text-slate-300 flex items-start space-x-2"
+                  className="flex items-start gap-3 rounded-2xl border border-white/[0.06] bg-slate-900/80 p-4 text-xs text-slate-200 leading-relaxed shadow-sm"
                 >
-                  <span className="text-sky-400 mt-0.5">•</span>
+                  <span className="text-sky-400 font-bold mt-0.5">•</span>
                   <span>{r.text}</span>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Fraud graph visualization */}
-          <GraphView graph={check.graph} centralLabel={check.checkId.slice(0, 8)} />
+          {/* 2-Hop Network Graph */}
+          <GraphView graph={check.graph} centralLabel={check.checkId.slice(0, 10)} />
 
-          {/* Fraud graph links if present */}
-          {(check.graph.confirmedLinks > 0 || check.graph.reportedCount > 0) && (
-            <div className="bg-red-950/20 border border-red-900/40 rounded-xl p-4 text-xs text-red-200 space-y-1">
-              <p className="font-semibold text-red-300">🕸️ Fraud Network Correlation:</p>
-              <p>
-                Linked to {check.graph.linkedReports || check.graph.reportedCount} reports across{" "}
-                {check.graph.cities || 1} cities.
-              </p>
-            </div>
-          )}
+          {/* Next Step */}
+          <div className="rounded-2xl border border-sky-500/30 bg-sky-950/40 p-4 text-xs font-semibold text-sky-200 leading-relaxed">
+            👉 {check.nextStep}
+          </div>
 
-          {/* Action buttons */}
-          <div className="pt-2 flex flex-col sm:flex-row gap-2.5">
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row gap-3 pt-2">
             <a
               href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
-                `⚠️ AsliJob Warning: ${check.reasons[0]?.text ?? "Scam alert"}. Check details: ${check.shareUrl}?ref=wa`
+                `⚠️ AsliJob Warning Alert: ${check.reasons[0]?.text ?? "Scam warning"}. Details: ${check.shareUrl}`
               )}`}
               target="_blank"
               rel="noreferrer"
-              className="flex-1 text-center px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition flex items-center justify-center gap-1.5"
+              className="flex-1 text-center rounded-2xl bg-emerald-600 hover:bg-emerald-500 py-3 text-xs font-bold text-white transition-all duration-150 active:scale-[0.96] shadow-sm flex items-center justify-center gap-2"
             >
               <span>💬</span>
-              <span>Share on WhatsApp</span>
+              <span>Warn Friends on WhatsApp</span>
             </a>
 
             <Link
-              href={`/report?checkId=${check.checkId}`}
-              className="flex-1 text-center px-4 py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs transition flex items-center justify-center gap-1.5"
+              href="/"
+              className="flex-1 text-center rounded-2xl border border-white/10 bg-slate-800 hover:bg-slate-700 py-3 text-xs font-bold text-white transition-all duration-150 active:scale-[0.96] shadow-sm flex items-center justify-center gap-2"
             >
-              <span>🚨</span>
-              <span>Report to 1930</span>
-            </Link>
-          </div>
-
-          <div className="flex items-center justify-between pt-1 text-xs">
-            <a
-              href={`/api/share/${check.checkId}`}
-              target="_blank"
-              rel="noreferrer"
-              className="text-sky-400 hover:underline"
-            >
-              🖼️ Open Warning Image Card
-            </a>
-            <Link href="/" className="text-slate-400 hover:text-slate-200">
-              Check another offer →
+              <span>🔍</span>
+              <span>Check Another Offer</span>
             </Link>
           </div>
         </div>
