@@ -153,8 +153,8 @@
       "id": "F22",
       "behavior": "Community threat bounty and micro-rewards: verifies novel scam syndicates reported by students and issues onchain Threat Hunter badges and payout claims",
       "verification": "npm run test -- bounty",
-      "state": "not_started",
-      "evidence": ""
+      "state": "passing",
+      "evidence": "verified 2026-10-31"
     }
   ]
 }
