@@ -111,8 +111,8 @@
       "id": "F16",
       "behavior": "Syndicate clustering and mule detection: clusters fraud graph nodes into organized cybercrime rings with Syndicate Threat Index (STI) and cross-state spread",
       "verification": "npm run test -- syndicate",
-      "state": "not_started",
-      "evidence": ""
+      "state": "passing",
+      "evidence": "verified 2026-10-30"
     }
   ]
 }
