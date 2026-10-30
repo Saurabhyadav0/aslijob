@@ -174,3 +174,4 @@ export function generateJobBoardSeal(employerId: string): JobBoardSeal {
     embedBadgeHtml: badgeHtml,
   };
 }
+
