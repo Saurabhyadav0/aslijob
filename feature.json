@@ -113,6 +113,27 @@
       "verification": "npm run test -- syndicate",
       "state": "passing",
       "evidence": "verified 2026-10-30"
+    },
+    {
+      "id": "F17",
+      "behavior": "Daily Merkle root batch cron and EIP-712 gasless offer letter attestation: batches registered letters into daily Merkle roots with gasless meta-transaction signing and zero-knowledge candidate privacy proofs",
+      "verification": "npm run test -- attest meta",
+      "state": "passing",
+      "evidence": "verified 2026-10-31"
+    },
+    {
+      "id": "F18",
+      "behavior": "ATS and job board verification connectors: processes Greenhouse and Lever offer webhooks to auto-issue tamper-proof verification QR codes and renders authentic employer job board seals",
+      "verification": "npm run test -- ats",
+      "state": "not_started",
+      "evidence": ""
+    },
+    {
+      "id": "F19",
+      "behavior": "Automated bank account freeze and mule alert dispatcher: evaluates high-loss mule accounts and generates structured CFCFRMS / NPCI freeze advisories for partner bank fraud desks",
+      "verification": "npm run test -- freeze",
+      "state": "not_started",
+      "evidence": ""
     }
   ]
 }
