@@ -271,7 +271,7 @@ function PricingContent() {
               <div className="space-y-1">
                 <span className="text-slate-400 font-semibold">USDT / Web3 (Base Sepolia / Polygon / EVM):</span>
                 <div className="rounded-xl border border-white/5 bg-slate-950 p-2.5 font-mono text-[11px] text-slate-300 break-all select-all">
-                  0x561775f0aF9D93457a41B35e69e00B9c5113581C
+                  0x56177EE8E42135f9f38A0ee1Ce8eB38C4Bc3581C
                 </div>
               </div>
             </div>
