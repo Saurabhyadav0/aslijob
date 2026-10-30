@@ -90,8 +90,8 @@
       "id": "F13",
       "behavior": "Crypto payment check and public API: a USDT address linked to scams triggers a warning, and job portals/banks can query the hashed scam signals through a paid API",
       "verification": "npm run test -- wallet api",
-      "state": "not_started",
-      "evidence": ""
+      "state": "passing",
+      "evidence": "verified 2026-10-30"
     }
   ]
 }
