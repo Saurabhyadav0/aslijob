@@ -92,6 +92,27 @@
       "verification": "npm run test -- wallet api",
       "state": "passing",
       "evidence": "verified 2026-10-30"
+    },
+    {
+      "id": "F14",
+      "behavior": "Paid subscription billing and webhook gateway: processes Dodo Payments / Razorpay webhooks, verifies HMAC signatures, and activates Campus Shield Pro and Enterprise Guard plans",
+      "verification": "npm run test -- billing",
+      "state": "passing",
+      "evidence": "verified 2026-10-30"
+    },
+    {
+      "id": "F15",
+      "behavior": "National Cybercrime 1930 / I4C complaint dossier: generates compliant law enforcement FIR dossiers with transaction trails and evidence hashes for cybercell reporting",
+      "verification": "npm run test -- complaints",
+      "state": "not_started",
+      "evidence": ""
+    },
+    {
+      "id": "F16",
+      "behavior": "Syndicate clustering and mule detection: clusters fraud graph nodes into organized cybercrime rings with Syndicate Threat Index (STI) and cross-state spread",
+      "verification": "npm run test -- syndicate",
+      "state": "not_started",
+      "evidence": ""
     }
   ]
 }
