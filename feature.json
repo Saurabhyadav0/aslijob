@@ -125,8 +125,8 @@
       "id": "F18",
       "behavior": "ATS and job board verification connectors: processes Greenhouse and Lever offer webhooks to auto-issue tamper-proof verification QR codes and renders authentic employer job board seals",
       "verification": "npm run test -- ats",
-      "state": "not_started",
-      "evidence": ""
+      "state": "passing",
+      "evidence": "verified 2026-10-31"
     },
     {
       "id": "F19",
