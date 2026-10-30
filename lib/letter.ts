@@ -116,21 +116,43 @@ export function issueOfferLetter(input: OfferLetterInput, easUidOverride?: strin
   };
 
   lettersStore.set(stored.id, stored);
+  lettersStore.set(stored.id.toUpperCase(), stored);
   return stored;
 }
 
 export function getLetter(id: string): StoredLetter | null {
-  if (lettersStore.size === 0 && id === "TCS-2026-ENG-089") {
-    issueOfferLetter({
-      id: "TCS-2026-ENG-089",
-      company: "TCS",
-      role: "System Engineer",
-      candidateEmail: "candidate@college.edu",
-      salary: 700000,
-      issueDate: "2026-10-29",
-    });
+  if (lettersStore.size === 0) {
+    seedDemoLetters();
   }
-  return lettersStore.get(id) ?? null;
+  const normId = id.trim().toUpperCase();
+  return lettersStore.get(normId) ?? lettersStore.get(id) ?? null;
+}
+
+function seedDemoLetters() {
+  issueOfferLetter({
+    id: "TCS-2026-ENG-089",
+    company: "TCS",
+    role: "System Engineer",
+    candidateEmail: "candidate@college.edu",
+    salary: 700000,
+    issueDate: "2026-10-29",
+  });
+  issueOfferLetter({
+    id: "TCS-2026-4401",
+    company: "Tata Consultancy Services (TCS)",
+    role: "Associate Software Engineer",
+    candidateEmail: "candidate.rahul@college.edu",
+    salary: 750000,
+    issueDate: "2026-10-29",
+  });
+  issueOfferLetter({
+    id: "INFOSYS-2026-ENG-012",
+    company: "Infosys",
+    role: "Systems Engineer Specialist",
+    candidateEmail: "candidate.priya@college.edu",
+    salary: 950000,
+    issueDate: "2026-10-29",
+  });
 }
 
 export function getAllLetters(): StoredLetter[] {
