@@ -146,8 +146,8 @@
       "id": "F21",
       "behavior": "AI deepfake recruiter and synthetic voice clone detector: identifies robotic voice clones, pitch uniformity, and synthetic avatar interview scams in remote hiring",
       "verification": "npm run test -- deepfake",
-      "state": "not_started",
-      "evidence": ""
+      "state": "passing",
+      "evidence": "verified 2026-10-31"
     },
     {
       "id": "F22",
