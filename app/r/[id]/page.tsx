@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getCheck } from "@/lib/store";
 import { supabase } from "@/lib/supabase";
 import GraphView from "@/components/GraphView";
+import VoiceSpeaker from "@/components/VoiceSpeaker";
 import type { CheckResult, Verdict } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -175,9 +176,17 @@ export default async function ResultPage({
             >
               {check.verdict}
             </span>
-            <span className="text-xs font-bold text-slate-400 tabular-nums">
-              Confidence: {Math.round(check.confidence * 100)}%
-            </span>
+            <div className="flex items-center gap-2">
+              <VoiceSpeaker
+                verdict={check.verdict}
+                confidence={check.confidence}
+                firstReason={check.reasons[0]?.text}
+                lang="en"
+              />
+              <span className="text-xs font-bold text-slate-400 tabular-nums">
+                {Math.round(check.confidence * 100)}%
+              </span>
+            </div>
           </div>
 
           <div className="space-y-3">

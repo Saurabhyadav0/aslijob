@@ -55,8 +55,8 @@
       "id": "F08",
       "behavior": "Indian languages and voice: the verdict and reasons render in English, Hindi and Marathi, and a question can be asked and answered by voice",
       "verification": "npm run test -- i18n",
-      "state": "not_started",
-      "evidence": ""
+      "state": "passing",
+      "evidence": "verified 2026-10-30"
     },
     {
       "id": "F09",

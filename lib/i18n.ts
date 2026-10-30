@@ -44,6 +44,12 @@ export const translations = {
     letterBtn: "Verify Letter",
     letterValid: "Verified by the company",
     letterInvalid: "Not issued by this company / Tampered",
+    micBtn: "Voice Input",
+    micListening: "Listening... speak now",
+    micUnsupported: "Voice input is not supported in this browser.",
+    speakVerdict: "Listen to Verdict",
+    speaking: "Speaking...",
+    stopSpeaking: "Stop Audio",
   },
   hi: {
     title: "नौकरी का ऑफर मिला? पैसे देने से पहले जांचें।",
@@ -88,6 +94,12 @@ export const translations = {
     letterBtn: "लेटर जांचें",
     letterValid: "कंपनी द्वारा आधिकारिक रूप से जारी",
     letterInvalid: "कंपनी द्वारा जारी नहीं किया गया / छेड़छाड़ की गई",
+    micBtn: "बोलकर बताएं",
+    micListening: "सुन रहे हैं... बोलिए...",
+    micUnsupported: "इस ब्राउज़र में वॉइस इनपुट समर्थित नहीं है।",
+    speakVerdict: "निष्कर्ष सुनें",
+    speaking: "बोल रहे हैं...",
+    stopSpeaking: "आवाज़ रोकें",
   },
   mr: {
     title: "नोकरीची ऑफर मिळाली? पैसे देण्यापूर्वी तपासा.",
@@ -132,5 +144,82 @@ export const translations = {
     letterBtn: "लेटर तपासा",
     letterValid: "कंपनीद्वारे अधिकृतपणे सत्यापित",
     letterInvalid: "कंपनीने जारी केलेले नाही / छेडछाड केलेली",
+    micBtn: "आवाजाने सांगा",
+    micListening: "ऐकत आहोत... बोला...",
+    micUnsupported: "या ब्राउझरमध्ये व्हॉइस इनपुट समर्थित नाही.",
+    speakVerdict: "निष्कर्ष ऐका",
+    speaking: "बोलत आहोत...",
+    stopSpeaking: "आवाज थांबवा",
   },
 };
+
+/**
+ * Maps product language code to BCP 47 speech synthesis & recognition locale.
+ */
+export function getSpeechLanguage(lang: Language): string {
+  switch (lang) {
+    case "hi":
+      return "hi-IN";
+    case "mr":
+      return "mr-IN";
+    default:
+      return "en-IN";
+  }
+}
+
+/**
+ * Formats a clear, natural sentence for speech synthesis in the selected language.
+ */
+export function formatSpokenVerdict(
+  verdict: "safe" | "suspicious" | "scam",
+  confidence: number,
+  firstReason?: string,
+  lang: Language = "en",
+): string {
+  const pct = Math.round(confidence * 100);
+
+  if (lang === "hi") {
+    switch (verdict) {
+      case "scam":
+        return `सावधान! यह नौकरी निश्चित रूप से एक घोटाला है। इसका विश्वास स्तर ${pct} प्रतिशत है। मुख्य कारण: ${
+          firstReason ?? "धोखाधड़ी के संकेत पाए गए हैं।"
+        } कृपया कोई भी पैसा न दें।`;
+      case "suspicious":
+        return `चेतावनी! यह जॉब ऑफर संदिग्ध है। इसका विश्वास स्तर ${pct} प्रतिशत है। मुख्य कारण: ${
+          firstReason ?? "संदेहास्पद मांग की गई है।"
+        } कंपनी से सीधे पुष्टि किए बिना कोई भुगतान न करें।`;
+      default:
+        return `यह जॉब ऑफर फिलहाल सुरक्षित प्रतीत होता है। कोई स्पष्ट लाल झंडे नहीं मिले, लेकिन हमेशा सतर्क रहें।`;
+    }
+  }
+
+  if (lang === "mr") {
+    switch (verdict) {
+      case "scam":
+        return `सावधान! ही नोकरी पूर्णपणे फसवणूक आहे. विश्वासार्हता ${pct} टक्के आहे. मुख्य कारण: ${
+          firstReason ?? "फसवणुकीचे संकेत आढळले आहेत."
+        } कृपया कोणतेही पैसे देऊ नका.`;
+      case "suspicious":
+        return `इशारा! ही नोकरी संशयास्पद आहे. विश्वासार्हता ${pct} टक्के आहे. मुख्य कारण: ${
+          firstReason ?? "संशयास्पद मागणी आढळली आहे."
+        } कंपनीशी थेट संपर्क साधल्याशिवाय पैसे देऊ नका.`;
+      default:
+        return `ही ऑफर सुरक्षित दिसत आहे. कोणतेही स्पष्ट धोक्याचे संकेत आढळले नाहीत. सावध रहा.`;
+    }
+  }
+
+  // English (default)
+  switch (verdict) {
+    case "scam":
+      return `Warning! This job offer is a confirmed scam with ${pct} percent confidence. Reason: ${
+        firstReason ?? "fraudulent fee demand detected."
+      } Do not send any money.`;
+    case "suspicious":
+      return `Attention! This job offer is suspicious with ${pct} percent confidence. Reason: ${
+        firstReason ?? "unverified claims detected."
+      } Verify with the company directly before you pay anything.`;
+    default:
+      return `This job offer appears safe. No immediate red flags were detected, but always stay cautious.`;
+  }
+}
+

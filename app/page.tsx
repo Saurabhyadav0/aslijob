@@ -4,6 +4,8 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import GraphView from "@/components/GraphView";
 import Sponsors from "@/components/Sponsors";
+import VoiceInput from "@/components/VoiceInput";
+import VoiceSpeaker from "@/components/VoiceSpeaker";
 import {
   Shield,
   ShieldCheck,
@@ -303,14 +305,21 @@ export default function Home() {
           <section className="space-y-4">
             {tab === "paste" && (
               <div className="space-y-3">
-                <div className="rounded-xl border border-white/[0.08] bg-slate-900/70 transition-all focus-within:border-sky-500/50 focus-within:ring-2 focus-within:ring-sky-500/15">
+                <div className="relative rounded-xl border border-white/[0.08] bg-slate-900/70 transition-all focus-within:border-sky-500/50 focus-within:ring-2 focus-within:ring-sky-500/15">
                   <textarea
                     value={text}
                     onChange={(e) => setText(e.target.value)}
                     placeholder={t.placeholderPaste}
                     rows={5}
-                    className="w-full resize-none rounded-xl bg-transparent p-4 text-sm leading-relaxed text-slate-100 outline-none placeholder:text-slate-500"
+                    className="w-full resize-none rounded-xl bg-transparent p-4 pb-12 text-sm leading-relaxed text-slate-100 outline-none placeholder:text-slate-500"
                   />
+                  <div className="absolute bottom-2.5 right-2.5 flex items-center gap-2">
+                    <VoiceInput
+                      lang={lang}
+                      onTranscript={(spoken) => setText((prev) => (prev ? prev + " " + spoken : spoken))}
+                      disabled={loading}
+                    />
+                  </div>
                 </div>
                 {/* Demo Cases Bar */}
                 <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400">
@@ -477,11 +486,19 @@ export default function Home() {
                     </div>
                   </div>
 
-                  {result.cached && (
-                    <span className="flex items-center gap-1 rounded-full border border-white/10 bg-slate-800 px-3 py-1 text-[11px] font-semibold text-slate-300">
-                      <Bolt size={11} /> Cached
-                    </span>
-                  )}
+                  <div className="flex flex-col sm:flex-row items-end sm:items-center gap-2">
+                    <VoiceSpeaker
+                      verdict={result.verdict}
+                      confidence={result.confidence}
+                      firstReason={result.reasons[0]?.text}
+                      lang={lang}
+                    />
+                    {result.cached && (
+                      <span className="flex items-center gap-1 rounded-full border border-white/10 bg-slate-800 px-3 py-1 text-[11px] font-semibold text-slate-300">
+                        <Bolt size={11} /> Cached
+                      </span>
+                    )}
+                  </div>
                 </div>
 
                 {/* Reasons List */}
