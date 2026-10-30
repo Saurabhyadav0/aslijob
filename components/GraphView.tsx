@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useMemo, useState } from "react";
 import type { GraphResult } from "@/lib/types";
 import { Network } from "@/components/icons";
 
@@ -7,127 +9,255 @@ type GraphViewProps = {
   centralLabel?: string;
 };
 
+type Kind = "target" | "identifier" | "report" | "clean";
+type Node = { id: string; label: string; sub: string; kind: Kind; x: number; y: number };
+
+const KIND_COLOR: Record<Kind, { fill: string; ring: string; text: string }> = {
+  target: { fill: "#0284C7", ring: "#38BDF8", text: "Checked identifier" },
+  identifier: { fill: "#B45309", ring: "#FBBF24", text: "Shared pivot" },
+  report: { fill: "#9F1239", ring: "#FB7185", text: "Confirmed scam report" },
+  clean: { fill: "#047857", ring: "#34D399", text: "No fraud links" },
+};
+
+const W = 520;
+const H = 280;
+
+/** Pick a human label for the shared pivot node from the real BFS path. */
+function pivotFrom(path: string[]): string {
+  const hit = path.find((p) => /upi|@|portal|http|\b[6-9]\d{9}\b|phone|tel/i.test(p));
+  return hit ?? path[1] ?? "Shared UPI / number";
+}
+
 export default function GraphView({ graph, centralLabel = "Target" }: GraphViewProps) {
   const hasLinks = graph.confirmedLinks > 0 || graph.reportedCount > 0;
+  const [hover, setHover] = useState<Node | null>(null);
+
+  const nodes = useMemo<Node[]>(() => {
+    const target: Node = {
+      id: "t",
+      label: centralLabel.length > 16 ? centralLabel.slice(0, 15) + "…" : centralLabel,
+      sub: "You checked this",
+      kind: "target",
+      x: 86,
+      y: H / 2,
+    };
+
+    if (!hasLinks) {
+      return [
+        target,
+        { id: "c1", label: "Clean", sub: "Not in any report", kind: "clean", x: 300, y: 96 },
+        { id: "c2", label: "Isolated", sub: "No 2-hop links", kind: "clean", x: 300, y: 184 },
+      ];
+    }
+
+    const pivot: Node = {
+      id: "p",
+      label: pivotFrom(graph.path),
+      sub: "Links the cluster",
+      kind: "identifier",
+      x: 232,
+      y: H / 2,
+    };
+
+    const count = Math.min(6, Math.max(graph.linkedReports, graph.reportedCount, graph.confirmedLinks, 3));
+    const reportLabels = graph.path.filter((p) => /report|fir|case|r\d|scam/i.test(p));
+    const reports: Node[] = Array.from({ length: count }).map((_, i) => {
+      const top = 46;
+      const bottom = H - 46;
+      const y = count === 1 ? H / 2 : top + (i * (bottom - top)) / (count - 1);
+      return {
+        id: `r${i}`,
+        label: reportLabels[i] ?? `Report #${i + 1}`,
+        sub: i < graph.confirmedLinks ? "Confirmed" : "Reported",
+        kind: "report",
+        x: 410,
+        y,
+      };
+    });
+
+    return [target, pivot, ...reports];
+  }, [graph, centralLabel, hasLinks]);
+
+  const target = nodes[0];
+  const pivot = hasLinks ? nodes[1] : null;
+  const leaves = hasLinks ? nodes.slice(2) : nodes.slice(1);
+
+  const radius = (k: Kind) => (k === "target" ? 20 : k === "identifier" ? 15 : 12);
 
   return (
-    <div className="space-y-3.5 rounded-2xl border border-white/[0.07] bg-slate-900/70 p-4 shadow-lg">
+    <div className="space-y-3 rounded-2xl border border-white/[0.07] bg-slate-900/70 p-4 shadow-lg">
+      {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className="flex h-6 w-6 items-center justify-center rounded-md bg-sky-500/10 text-sky-400">
             <Network size={14} />
           </span>
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-300">
-            Fraud network · 2-hop
-          </span>
+          <div className="leading-tight">
+            <div className="text-xs font-bold uppercase tracking-wider text-slate-200">Fraud network</div>
+            <div className="text-[10px] font-medium text-slate-500">2-hop BFS · live on TigerGraph</div>
+          </div>
         </div>
-        <span className="text-[11px] font-medium tabular-nums text-slate-400">
-          {graph.cities} {graph.cities === 1 ? "city" : "cities"} · {graph.linkedReports || graph.reportedCount} reports
+        <span className="rounded-full border border-orange-500/25 bg-orange-500/[0.07] px-2 py-0.5 text-[10px] font-bold text-orange-300">
+          TigerGraph
         </span>
       </div>
 
-      {/* SVG Canvas with Concentric Inner Radius */}
-      <div className="relative flex justify-center bg-slate-950/80 border border-white/[0.06] rounded-xl p-2 overflow-hidden shadow-inner">
-        <svg viewBox="0 0 500 240" className="w-full h-48 select-none">
+      {/* Canvas */}
+      <div className="relative overflow-hidden rounded-xl border border-white/[0.06] bg-slate-950/70 shadow-inner">
+        <svg viewBox={`0 0 ${W} ${H}`} className="h-52 w-full select-none">
           <defs>
-            <radialGradient id="nodeGlow" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="#38BDF8" stopOpacity="0.7" />
-              <stop offset="100%" stopColor="#0284C7" stopOpacity="0" />
+            <radialGradient id="gTarget" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stopColor="#38BDF8" stopOpacity="0.55" />
+              <stop offset="100%" stopColor="#38BDF8" stopOpacity="0" />
             </radialGradient>
-            <radialGradient id="scamGlow" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="#EF4444" stopOpacity="0.75" />
-              <stop offset="100%" stopColor="#7F1D1D" stopOpacity="0" />
+            <radialGradient id="gReport" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stopColor="#FB7185" stopOpacity="0.55" />
+              <stop offset="100%" stopColor="#FB7185" stopOpacity="0" />
             </radialGradient>
-            <radialGradient id="safeGlow" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="#10B981" stopOpacity="0.7" />
-              <stop offset="100%" stopColor="#047857" stopOpacity="0" />
-            </radialGradient>
-            {/* Background grid */}
-            <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
-              <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#334155" strokeWidth="0.5" opacity="0.25" />
+            <pattern id="gGrid" width="26" height="26" patternUnits="userSpaceOnUse">
+              <path d="M26 0H0V26" fill="none" stroke="#334155" strokeWidth="0.5" opacity="0.2" />
             </pattern>
           </defs>
 
-          <rect width="100%" height="100%" fill="url(#grid)" />
+          <rect width={W} height={H} fill="url(#gGrid)" />
 
-          {/* Connecting Edges */}
-          {hasLinks ? (
+          {/* Edges */}
+          {hasLinks && pivot && (
             <>
-              {/* Center to Intermediate */}
-              <line x1="250" y1="120" x2="160" y2="70" stroke="#F59E0B" strokeWidth="2" strokeDasharray="3,3" opacity="0.8" />
-              <line x1="250" y1="120" x2="340" y2="70" stroke="#F59E0B" strokeWidth="2" strokeDasharray="3,3" opacity="0.8" />
-              <line x1="250" y1="120" x2="250" y2="190" stroke="#38BDF8" strokeWidth="1.5" opacity="0.7" />
-
-              {/* Intermediate to Scam Reports */}
-              <line x1="160" y1="70" x2="80" y2="50" stroke="#EF4444" strokeWidth="2" opacity="0.9" />
-              <line x1="160" y1="70" x2="100" y2="130" stroke="#EF4444" strokeWidth="2" opacity="0.9" />
-              <line x1="340" y1="70" x2="420" y2="50" stroke="#EF4444" strokeWidth="2" opacity="0.9" />
-              <line x1="340" y1="70" x2="400" y2="130" stroke="#EF4444" strokeWidth="2" opacity="0.9" />
-            </>
-          ) : (
-            <>
-              <line x1="250" y1="120" x2="170" y2="120" stroke="#10B981" strokeWidth="1.5" strokeDasharray="4,4" opacity="0.7" />
-              <line x1="250" y1="120" x2="330" y2="120" stroke="#10B981" strokeWidth="1.5" strokeDasharray="4,4" opacity="0.7" />
+              <line
+                x1={target.x}
+                y1={target.y}
+                x2={pivot.x}
+                y2={pivot.y}
+                stroke="#38BDF8"
+                strokeWidth={2}
+                className="edge-flow"
+                opacity={0.85}
+              />
+              {leaves.map((n) => (
+                <line
+                  key={`e-${n.id}`}
+                  x1={pivot.x}
+                  y1={pivot.y}
+                  x2={n.x}
+                  y2={n.y}
+                  stroke={hover && hover.id !== n.id ? "#475569" : "#FB7185"}
+                  strokeWidth={hover?.id === n.id ? 2.4 : 1.6}
+                  className="edge-flow"
+                  opacity={hover && hover.id !== n.id ? 0.35 : 0.8}
+                />
+              ))}
             </>
           )}
+          {!hasLinks &&
+            leaves.map((n) => (
+              <line
+                key={`e-${n.id}`}
+                x1={target.x}
+                y1={target.y}
+                x2={n.x}
+                y2={n.y}
+                stroke="#34D399"
+                strokeWidth={1.4}
+                strokeDasharray="4 5"
+                opacity={0.6}
+              />
+            ))}
 
-          {/* Center Target Node */}
-          <circle cx="250" cy="120" r="32" fill="url(#nodeGlow)" />
-          <circle cx="250" cy="120" r="16" fill="#0284C7" stroke="#38BDF8" strokeWidth="2.5" />
-          <text x="250" y="124" textAnchor="middle" fontSize="9" fontWeight="800" letterSpacing="0.5" fill="#FFFFFF">TARGET</text>
-          <text x="250" y="148" textAnchor="middle" fontSize="9" fill="#94A3B8" fontWeight="500">{centralLabel}</text>
+          {/* Nodes */}
+          {nodes.map((n) => {
+            const c = KIND_COLOR[n.kind];
+            const r = radius(n.kind);
+            const dim = hover && hover.id !== n.id && n.kind === "report";
+            return (
+              <g
+                key={n.id}
+                className={n.kind === "report" ? "node-float" : undefined}
+                style={{ transformBox: "fill-box", transformOrigin: "center", cursor: "pointer" }}
+                onMouseEnter={() => setHover(n)}
+                onMouseLeave={() => setHover(null)}
+                opacity={dim ? 0.5 : 1}
+              >
+                {(n.kind === "target" || n.kind === "report") && (
+                  <circle cx={n.x} cy={n.y} r={r + 12} fill={`url(#${n.kind === "target" ? "gTarget" : "gReport"})`} />
+                )}
+                <circle
+                  cx={n.x}
+                  cy={n.y}
+                  r={hover?.id === n.id ? r + 2 : r}
+                  fill={c.fill}
+                  stroke={c.ring}
+                  strokeWidth={2}
+                />
+                {n.kind === "target" && (
+                  <text x={n.x} y={n.y + 3} textAnchor="middle" fontSize="8" fontWeight="800" fill="#fff">
+                    YOU
+                  </text>
+                )}
+                <text x={n.x} y={n.y + r + 13} textAnchor="middle" fontSize="9" fontWeight="600" fill="#CBD5E1">
+                  {n.label.length > 16 ? n.label.slice(0, 15) + "…" : n.label}
+                </text>
+              </g>
+            );
+          })}
 
-          {/* Linked Network Nodes */}
-          {hasLinks ? (
-            <>
-              {/* Hop 1 Nodes (UPI / Web) */}
-              <circle cx="160" cy="70" r="13" fill="#D97706" stroke="#FBBF24" strokeWidth="2" />
-              <text x="160" y="73" textAnchor="middle" fontSize="8" fontWeight="700" fill="#FFFFFF">UPI ID</text>
-              <text x="160" y="93" textAnchor="middle" fontSize="8" fill="#FBBF24" fontWeight="600">Shared Pay</text>
-
-              <circle cx="340" cy="70" r="13" fill="#D97706" stroke="#FBBF24" strokeWidth="2" />
-              <text x="340" y="73" textAnchor="middle" fontSize="8" fontWeight="700" fill="#FFFFFF">SITE</text>
-              <text x="340" y="93" textAnchor="middle" fontSize="8" fill="#FBBF24" fontWeight="600">Fake Portal</text>
-
-              {/* Hop 2 Nodes (Confirmed Scam Reports) */}
-              <circle cx="80" cy="50" r="22" fill="url(#scamGlow)" />
-              <circle cx="80" cy="50" r="13" fill="#B91C1C" stroke="#EF4444" strokeWidth="2" />
-              <text x="80" y="53" textAnchor="middle" fontSize="7.5" fontWeight="800" fill="#FFFFFF">SCAM 1</text>
-              <text x="80" y="73" textAnchor="middle" fontSize="8" fill="#FCA5A5">Pune FIR</text>
-
-              <circle cx="100" cy="130" r="12" fill="#B91C1C" stroke="#EF4444" strokeWidth="2" />
-              <text x="100" y="133" textAnchor="middle" fontSize="7.5" fontWeight="800" fill="#FFFFFF">SCAM 2</text>
-              <text x="100" y="152" textAnchor="middle" fontSize="8" fill="#FCA5A5">Patna Report</text>
-
-              <circle cx="420" cy="50" r="22" fill="url(#scamGlow)" />
-              <circle cx="420" cy="50" r="13" fill="#B91C1C" stroke="#EF4444" strokeWidth="2" />
-              <text x="420" y="53" textAnchor="middle" fontSize="7.5" fontWeight="800" fill="#FFFFFF">SCAM 3</text>
-              <text x="420" y="73" textAnchor="middle" fontSize="8" fill="#FCA5A5">Indore FIR</text>
-
-              <circle cx="400" cy="130" r="12" fill="#B91C1C" stroke="#EF4444" strokeWidth="2" />
-              <text x="400" y="133" textAnchor="middle" fontSize="7.5" fontWeight="800" fill="#FFFFFF">SCAM 4</text>
-              <text x="400" y="152" textAnchor="middle" fontSize="8" fill="#FCA5A5">Noida Case</text>
-
-              {/* Hop 1 Node bottom (Phone) */}
-              <circle cx="250" cy="190" r="12" fill="#0369A1" stroke="#38BDF8" strokeWidth="2" />
-              <text x="250" y="193" textAnchor="middle" fontSize="8" fontWeight="700" fill="#FFFFFF">TEL</text>
-              <text x="250" y="212" textAnchor="middle" fontSize="8" fill="#7DD3FC">Virtual VoIP</text>
-            </>
-          ) : (
-            <>
-              {/* Isolated Safe State */}
-              <circle cx="170" cy="120" r="16" fill="url(#safeGlow)" />
-              <circle cx="170" cy="120" r="10" fill="#047857" stroke="#10B981" strokeWidth="1.5" />
-              <text x="170" y="123" textAnchor="middle" fontSize="7" fontWeight="bold" fill="#FFFFFF">CLEAN</text>
-
-              <circle cx="330" cy="120" r="16" fill="url(#safeGlow)" />
-              <circle cx="330" cy="120" r="10" fill="#047857" stroke="#10B981" strokeWidth="1.5" />
-              <text x="330" y="123" textAnchor="middle" fontSize="7" fontWeight="bold" fill="#FFFFFF">ISOLATED</text>
-              <text x="250" y="80" textAnchor="middle" fontSize="10" fill="#6EE7B7" fontWeight="600">No linked fraud clusters found in 2-hop radius</text>
-            </>
+          {/* Hover tooltip (SVG, scales with viewBox) */}
+          {hover && (
+            <g pointerEvents="none">
+              <rect
+                x={Math.min(Math.max(hover.x - 70, 6), W - 146)}
+                y={hover.y - radius(hover.kind) - 44}
+                width={140}
+                height={30}
+                rx={7}
+                fill="#0b1220"
+                stroke={KIND_COLOR[hover.kind].ring}
+                strokeWidth={1}
+                opacity={0.97}
+              />
+              <text
+                x={Math.min(Math.max(hover.x - 70, 6), W - 146) + 10}
+                y={hover.y - radius(hover.kind) - 29}
+                fontSize="9.5"
+                fontWeight="700"
+                fill="#fff"
+              >
+                {hover.label.length > 18 ? hover.label.slice(0, 17) + "…" : hover.label}
+              </text>
+              <text
+                x={Math.min(Math.max(hover.x - 70, 6), W - 146) + 10}
+                y={hover.y - radius(hover.kind) - 19}
+                fontSize="8"
+                fill={KIND_COLOR[hover.kind].ring}
+              >
+                {KIND_COLOR[hover.kind].text}
+              </text>
+            </g>
           )}
         </svg>
+
+        {/* Legend */}
+        <div className="pointer-events-none absolute bottom-2 left-3 flex items-center gap-3 text-[9px] font-semibold text-slate-400">
+          <span className="flex items-center gap-1"><i className="h-2 w-2 rounded-full bg-sky-500" /> You</span>
+          <span className="flex items-center gap-1"><i className="h-2 w-2 rounded-full bg-amber-500" /> Pivot</span>
+          <span className="flex items-center gap-1"><i className="h-2 w-2 rounded-full bg-rose-500" /> Report</span>
+        </div>
       </div>
+
+      {/* Stat strip */}
+      <div className="grid grid-cols-3 gap-2 text-center">
+        {[
+          { v: graph.linkedReports || graph.reportedCount, l: "Linked reports" },
+          { v: graph.cities, l: graph.cities === 1 ? "City" : "Cities" },
+          { v: graph.confirmedLinks, l: "Confirmed" },
+        ].map((s, i) => (
+          <div key={i} className="rounded-lg border border-white/[0.06] bg-slate-950/50 py-2">
+            <div className="text-base font-extrabold tabular-nums text-white">{s.v}</div>
+            <div className="text-[10px] font-medium uppercase tracking-wide text-slate-500">{s.l}</div>
+          </div>
+        ))}
+      </div>
+      <p className="text-center text-[10px] text-slate-600">Hover a node to inspect · tap on mobile</p>
     </div>
   );
 }

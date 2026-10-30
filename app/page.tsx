@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import GraphView from "@/components/GraphView";
+import Sponsors from "@/components/Sponsors";
 import {
   Shield,
   ShieldCheck,
@@ -385,14 +386,20 @@ export default function Home() {
               </div>
             )}
 
-            {/* Primary Action Button */}
+            {/* Primary Action Button — "scanner" treatment */}
             {tab !== "upload" && (
               <button
                 onClick={() => handleCheck()}
                 disabled={loading || (tab === "paste" ? !text.trim() : !directInput.trim())}
-                className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-sky-400 to-blue-500 py-3.5 text-sm font-bold text-slate-950 shadow-lg shadow-sky-500/20 transition-all duration-150 hover:from-sky-300 hover:to-sky-400 active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-40"
+                className="btn-scan flex w-full items-center justify-center gap-2.5 rounded-xl py-4 text-sm font-extrabold uppercase tracking-wide text-sky-50 disabled:cursor-not-allowed disabled:opacity-40"
               >
-                {loading ? <Bolt size={17} strokeWidth={2.2} /> : <ShieldCheck size={17} strokeWidth={2.2} />}
+                <span className="corner tl" />
+                <span className="corner tr" />
+                <span className="corner bl" />
+                <span className="corner br" />
+                <span className={`text-sky-300 ${loading ? "animate-pulse" : ""}`}>
+                  {loading ? <Bolt size={18} strokeWidth={2.4} /> : <ShieldCheck size={18} strokeWidth={2.4} />}
+                </span>
                 <span>{loading ? t.btnChecking : t.btnCheck}</span>
               </button>
             )}
@@ -674,28 +681,33 @@ export default function Home() {
       </div>
 
       {/* Footer */}
-      <footer className="flex flex-col items-center justify-between gap-4 border-t border-white/[0.07] pt-6 text-xs text-slate-500 sm:flex-row">
-        <div className="flex items-center gap-2">
-          <Shield size={13} className="text-slate-400" />
-          <span>AsliJob · Hacker House Goa 2026</span>
-          <span className="text-slate-700">·</span>
-          <span>Zero-PII hashed store</span>
-        </div>
-        <div className="flex gap-5">
-          <Link href="/pricing" className="transition-colors hover:text-slate-300">
-            Campus plans
-          </Link>
-          <Link href="/verify" className="transition-colors hover:text-slate-300">
-            Verify letter
-          </Link>
-          <a
-            href="https://web.telegram.org/k/#@AsliJobBot"
-            target="_blank"
-            rel="noreferrer"
-            className="font-medium transition-colors hover:text-slate-300"
-          >
-            @AsliJobBot
-          </a>
+      <footer className="space-y-8 border-t border-white/[0.07] pt-8">
+        {/* Sponsor / technology-partner strip */}
+        <Sponsors />
+
+        <div className="flex flex-col items-center justify-between gap-4 border-t border-white/[0.06] pt-6 text-xs text-slate-500 sm:flex-row">
+          <div className="flex items-center gap-2">
+            <Shield size={13} className="text-slate-400" />
+            <span>AsliJob · Hacker House Goa 2026</span>
+            <span className="text-slate-700">·</span>
+            <span>Zero-PII hashed store</span>
+          </div>
+          <div className="flex gap-5">
+            <Link href="/pricing" className="transition-colors hover:text-slate-300">
+              Campus plans
+            </Link>
+            <Link href="/verify" className="transition-colors hover:text-slate-300">
+              Verify letter
+            </Link>
+            <a
+              href="https://web.telegram.org/k/#@AsliJobBot"
+              target="_blank"
+              rel="noreferrer"
+              className="font-medium transition-colors hover:text-slate-300"
+            >
+              @AsliJobBot
+            </a>
+          </div>
         </div>
       </footer>
     </div>
