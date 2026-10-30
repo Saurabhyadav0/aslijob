@@ -1,5 +1,6 @@
 import React from "react";
 import type { GraphResult } from "@/lib/types";
+import { Network } from "@/components/icons";
 
 type GraphViewProps = {
   graph: GraphResult;
@@ -10,18 +11,18 @@ export default function GraphView({ graph, centralLabel = "Target" }: GraphViewP
   const hasLinks = graph.confirmedLinks > 0 || graph.reportedCount > 0;
 
   return (
-    <div className="rounded-2xl border border-white/[0.08] bg-slate-900/90 p-4 space-y-3.5 shadow-lg">
+    <div className="space-y-3.5 rounded-2xl border border-white/[0.07] bg-slate-900/70 p-4 shadow-lg">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="flex h-5 w-5 items-center justify-center rounded-md bg-sky-500/10 text-xs">
-            🕸️
+          <span className="flex h-6 w-6 items-center justify-center rounded-md bg-sky-500/10 text-sky-400">
+            <Network size={14} />
           </span>
           <span className="text-xs font-bold uppercase tracking-wider text-slate-300">
-            Fraud Network Graph (2-Hop Analysis)
+            Fraud network · 2-hop
           </span>
         </div>
-        <span className="text-[11px] font-medium text-slate-400 tabular-nums">
-          {graph.cities} {graph.cities === 1 ? "City" : "Cities"} • {graph.linkedReports || graph.reportedCount} Reports
+        <span className="text-[11px] font-medium tabular-nums text-slate-400">
+          {graph.cities} {graph.cities === 1 ? "city" : "cities"} · {graph.linkedReports || graph.reportedCount} reports
         </span>
       </div>
 

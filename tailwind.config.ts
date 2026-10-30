@@ -10,7 +10,17 @@ const config: Config = {
         scam: "#b91c1c",
       },
       fontFamily: {
-        sans: ["'Noto Sans'", "ui-sans-serif", "system-ui", "sans-serif"],
+        sans: [
+          "'Plus Jakarta Sans'",
+          "'Noto Sans Devanagari'",
+          "ui-sans-serif",
+          "system-ui",
+          "-apple-system",
+          "sans-serif",
+        ],
+      },
+      letterSpacing: {
+        tightest: "-0.03em",
       },
     },
   },
