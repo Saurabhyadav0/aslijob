@@ -63,3 +63,4 @@ export async function GET(req: NextRequest) {
   const claims = listBountyClaims(email ?? undefined);
   return NextResponse.json({ count: claims.length, claims });
 }
+

@@ -101,3 +101,4 @@ export function listBountyClaims(hunterEmail?: string): BountyClaim[] {
   }
   return all;
 }
+
