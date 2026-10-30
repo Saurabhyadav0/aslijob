@@ -30,10 +30,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="min-h-screen bg-slate-950 font-sans text-slate-100 antialiased selection:bg-sky-500/30 selection:text-sky-200">
-        {/* Subtle Background Glow Mesh */}
+        {/* Background: faint grid + single restrained glow */}
         <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
-          <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-gradient-to-b from-sky-500/10 via-blue-600/5 to-transparent blur-3xl opacity-70" />
-          <div className="absolute bottom-0 right-0 w-[600px] h-[400px] bg-gradient-to-t from-emerald-500/5 to-transparent blur-3xl opacity-50" />
+          <div
+            className="absolute inset-0 opacity-[0.18]"
+            style={{
+              backgroundImage:
+                "linear-gradient(to right, rgba(148,163,184,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(148,163,184,0.06) 1px, transparent 1px)",
+              backgroundSize: "44px 44px",
+              maskImage: "radial-gradient(ellipse 80% 55% at 50% 0%, #000 40%, transparent 100%)",
+              WebkitMaskImage: "radial-gradient(ellipse 80% 55% at 50% 0%, #000 40%, transparent 100%)",
+            }}
+          />
+          <div className="absolute -top-48 left-1/2 -translate-x-1/2 w-[900px] h-[440px] bg-sky-500/10 blur-[120px] rounded-full" />
         </div>
 
         <div className="mx-auto min-h-screen w-full max-w-6xl px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
