@@ -4,6 +4,7 @@ import { extractFields } from "./extract";
 import { runRules } from "./rules";
 import { confidenceFor, finalVerdict, nextStepFor, type AiVerdict } from "./score";
 import { getGraph } from "./graph";
+import { queryFraudGraph } from "./tigergraph";
 import { hashMessage } from "./hash";
 import { runLookups } from "./lookups";
 import { getCachedCheck, saveCheck, isDemoMode, getUploadedFile } from "./store";
@@ -76,7 +77,7 @@ export async function runCheck(input: CheckInput): Promise<CheckResult> {
     ...fields.emails.map((v) => ({ kind: "email" as const, value: v })),
     ...fields.telegram_handles.map((v) => ({ kind: "telegram" as const, value: v })),
   ];
-  const graph = getGraph().neighbourRisk(seeds);
+  const graph = await queryFraudGraph(seeds);
 
   const ai = await getGeminiVerdict(
     text,

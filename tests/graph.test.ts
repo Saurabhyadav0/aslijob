@@ -50,5 +50,27 @@ describe("Fraud Graph (U13, U14, U16)", () => {
     expect(check.confirmedLinks).toBeGreaterThanOrEqual(1);
     expect(check.cities).toBeGreaterThanOrEqual(1);
   });
+
+  it("queryFraudGraph gracefully executes and falls back with source metadata", async () => {
+    const { queryFraudGraph, upsertReportToTigerGraph } = await import("@/lib/tigergraph");
+    const seededReport = seed.reports[0];
+    const ident = seededReport.identifiers[0];
+
+    const res = await queryFraudGraph([ident as any]);
+    expect(res).toBeDefined();
+    expect(res.confirmedLinks).toBeGreaterThanOrEqual(1);
+    expect(["tigergraph", "postgres_fallback"]).toContain(res.source);
+    expect(Array.isArray(res.path)).toBe(true);
+
+    // Upsert call safely completes without throwing
+    const upsertRes = await upsertReportToTigerGraph({
+      id: "unit-test-upsert",
+      city: "Delhi",
+      scam_type: "fee",
+      status: "unverified",
+      identifiers: [ident as any],
+    });
+    expect(typeof upsertRes).toBe("boolean");
+  });
 });
 

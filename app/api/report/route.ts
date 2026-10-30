@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getCheck, getCheckIdentifiers, saveReport } from "@/lib/store";
 import { getGraph } from "@/lib/graph";
+import { upsertReportToTigerGraph } from "@/lib/tigergraph";
 
 export const runtime = "nodejs";
 
@@ -52,6 +53,14 @@ export async function POST(req: Request) {
       status: "unverified",
       identifiers,
     });
+    // Cloud sync to TigerGraph Savanna
+    void upsertReportToTigerGraph({
+      id: reportId,
+      city: "Online",
+      scam_type: scamType,
+      status: "unverified",
+      identifiers,
+    }).catch(() => {});
   }
 
   // Trigger viaSocket webhook if configured

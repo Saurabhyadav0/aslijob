@@ -9,20 +9,30 @@
  *   npm run graph:sync
  */
 import { getGraph } from "../lib/graph";
+import { upsertReportToTigerGraph, getTigerGraphToken } from "../lib/tigergraph";
 import seed from "../fixtures/graph_seed.json";
 
 async function main() {
-  const tgHost = process.env.TIGERGRAPH_HOST;
-  const tgToken = process.env.TIGERGRAPH_TOKEN;
+  const tgHost = process.env.TIGERGRAPH_HOST || process.env.TG_HOST;
 
-  if (tgHost && tgToken) {
-    console.log(`[TigerGraph Sync] Connecting to ${tgHost}...`);
-    // Remote TigerGraph REST API vertex/edge upsert
-    console.log(`[TigerGraph Sync] Synced ${seed.reports.length} reports to TigerGraph.`);
-    return;
+  if (tgHost) {
+    console.log(`[TigerGraph Sync] Checking connection to ${tgHost}...`);
+    const token = await getTigerGraphToken();
+    if (token) {
+      console.log(`[TigerGraph Sync] Connected successfully with active auth token.`);
+      let synced = 0;
+      for (const r of seed.reports) {
+        const ok = await upsertReportToTigerGraph(r as any);
+        if (ok) synced++;
+      }
+      console.log(`[TigerGraph Sync] Successfully synced ${synced}/${seed.reports.length} reports to TigerGraph Cloud.`);
+      return;
+    } else {
+      console.log(`[TigerGraph Sync] Notice: TigerGraph instance is starting or token unavailable.`);
+    }
   }
 
-  console.log("[Graph Sync] DEMO MODE: Using in-memory fraud graph fallback.");
+  console.log("[Graph Sync] Using in-memory fraud graph fallback.");
   const g = getGraph();
 
   // Test query to verify graph readiness
