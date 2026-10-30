@@ -59,3 +59,4 @@ export async function GET(req: Request) {
   const history = getBroadcastHistory(collegeId);
   return NextResponse.json({ ok: true, history });
 }
+

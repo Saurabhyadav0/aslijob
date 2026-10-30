@@ -285,3 +285,4 @@ export function updateAlertStatus(
   alert.status = newStatus;
   return true;
 }
+

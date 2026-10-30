@@ -54,3 +54,4 @@ export function validateApiKey(key?: string | null): {
 
   return { valid: true, partner };
 }
+
