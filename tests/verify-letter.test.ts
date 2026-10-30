@@ -78,5 +78,25 @@ describe("Verified offer letter & EAS Merkle attestation (F06 / U20)", () => {
     expect(cronData.easUid).toBeDefined();
     expect(cronData.network).toBe("base-sepolia");
   });
+
+  it("verifies onchain letter hash format for AsliJobLetterVerifier on Sepolia", () => {
+    const letter = issueOfferLetter({
+      id: "TCS-2026-ENG-089",
+      company: "TCS",
+      role: "System Engineer",
+      candidateEmail: "candidate@college.edu",
+      salary: 700000,
+      issueDate: "2026-10-29",
+    });
+
+    // The letter hash must be a 64-char hex string compatible with Solidity bytes32
+    expect(letter.letterHash).toMatch(/^[a-f0-9]{64}$/);
+    const evmBytes32 = `0x${letter.letterHash}`;
+    expect(evmBytes32).toHaveLength(66);
+
+    // Contract address format validation
+    const contractAddress = process.env.NEXT_PUBLIC_VERIFIER_CONTRACT_ADDRESS ?? "0x6Fbc36723310fec0489Ec946A1975d68cAA1D50f";
+    expect(contractAddress).toMatch(/^0x[a-fA-F0-9]{40}$/);
+  });
 });
 
