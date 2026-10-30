@@ -134,6 +134,27 @@
       "verification": "npm run test -- freeze",
       "state": "passing",
       "evidence": "verified 2026-10-31"
+    },
+    {
+      "id": "F20",
+      "behavior": "Pan-India vernacular expansion: supports Tamil, Telugu, Kannada, Bengali, and Gujarati localization with regional voice input and audio readout",
+      "verification": "npm run test -- vernacular",
+      "state": "passing",
+      "evidence": "verified 2026-10-31"
+    },
+    {
+      "id": "F21",
+      "behavior": "AI deepfake recruiter and synthetic voice clone detector: identifies robotic voice clones, pitch uniformity, and synthetic avatar interview scams in remote hiring",
+      "verification": "npm run test -- deepfake",
+      "state": "not_started",
+      "evidence": ""
+    },
+    {
+      "id": "F22",
+      "behavior": "Community threat bounty and micro-rewards: verifies novel scam syndicates reported by students and issues onchain Threat Hunter badges and payout claims",
+      "verification": "npm run test -- bounty",
+      "state": "not_started",
+      "evidence": ""
     }
   ]
 }
