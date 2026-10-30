@@ -63,6 +63,15 @@ export function runRules(text: string, f: Fields): Hit[] {
     });
   }
 
+  const CRYPTO_TERMS = /\b(usdt|crypto|trc20|erc20|bitcoin|btc|monero|xmr|wallet address|cake wallet)\b/i;
+  if ((CRYPTO_TERMS.test(text) && (feeFromText || feeAmount || f.wallet_addresses.length > 0)) || f.wallet_addresses.length > 0) {
+    hits.push({
+      id: "crypto_job_fee",
+      severity: "blocking",
+      reason: "Demands fee or deposit in cryptocurrency (USDT / Monero / Bitcoin) — classic untraceable task scam",
+    });
+  }
+
   if (SENSITIVE_WORDS.test(text) || (f.asks_for ?? []).some((a) => a !== "none")) {
     hits.push({
       id: "early_sensitive_info",

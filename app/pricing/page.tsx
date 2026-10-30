@@ -7,11 +7,13 @@ import { useSearchParams } from "next/navigation";
 function PricingContent() {
   const [studentCount, setStudentCount] = useState(500);
   const [loading, setLoading] = useState(false);
+  const [showCryptoModal, setShowCryptoModal] = useState(false);
   const searchParams = useSearchParams();
   const isSuccess = searchParams.get("status") === "success";
 
   const pricePerStudent = 29; // Rs 29/student/year (Plan Page 33)
   const annualTotal = (studentCount * pricePerStudent).toLocaleString("en-IN");
+  const usdtEquivalent = Math.round((studentCount * pricePerStudent) / 88); // ~USDT at 88 INR
 
   async function handleCheckout() {
     setLoading(true);
@@ -203,17 +205,92 @@ function PricingContent() {
             </ul>
           </div>
 
-          {/* Checkout CTA */}
-          <button
-            onClick={handleCheckout}
-            disabled={loading}
-            className="group relative flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-sky-400 to-sky-500 py-3.5 pe-4 ps-3.5 text-xs font-extrabold text-slate-950 shadow-lg shadow-sky-500/20 transition-all duration-150 hover:from-sky-300 hover:to-sky-400 active:scale-[0.96] disabled:opacity-50"
-          >
-            <span>💳</span>
-            <span>{loading ? "Preparing Checkout..." : "Proceed to Dodo Payments"}</span>
-          </button>
+          {/* Payment Action Buttons */}
+          <div className="space-y-2 pt-2">
+            <button
+              onClick={handleCheckout}
+              disabled={loading}
+              className="group relative flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-sky-400 to-sky-500 py-3.5 pe-4 ps-3.5 text-xs font-extrabold text-slate-950 shadow-lg shadow-sky-500/20 transition-all duration-150 hover:from-sky-300 hover:to-sky-400 active:scale-[0.96] disabled:opacity-50"
+            >
+              <span>💳</span>
+              <span>{loading ? "Preparing Checkout..." : "Pay via Dodo (Cards / UPI)"}</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setShowCryptoModal(true)}
+              className="flex w-full items-center justify-center gap-2 rounded-2xl border border-white/10 bg-slate-800/90 py-3 text-xs font-bold text-slate-200 transition-all duration-150 hover:bg-slate-700 active:scale-[0.96] shadow-sm"
+            >
+              <span>🍰</span>
+              <span>Pay with Cake Wallet / Crypto (~${usdtEquivalent} USDT / XMR)</span>
+            </button>
+          </div>
         </div>
       </div>
+
+      {/* Cake Wallet / Web3 Payment Modal */}
+      {showCryptoModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm">
+          <div className="relative w-full max-w-md rounded-3xl border border-white/[0.1] bg-slate-900 p-6 space-y-5 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-white/[0.08] pb-3">
+              <div className="flex items-center gap-2">
+                <span className="text-xl">🍰</span>
+                <div>
+                  <h3 className="text-sm font-extrabold text-white">Cake Wallet / Web3 Checkout</h3>
+                  <p className="text-[11px] text-slate-400">Institutional Plan • {studentCount} Students</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowCryptoModal(false)}
+                className="text-slate-400 hover:text-white text-sm"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="rounded-2xl border border-white/[0.06] bg-slate-950/70 p-4 space-y-2 text-xs">
+              <div className="flex justify-between font-bold text-slate-200">
+                <span>Calculated Amount:</span>
+                <span className="text-emerald-400 tabular-nums">~{usdtEquivalent} USDT / {((studentCount * pricePerStudent) / (160 * 88)).toFixed(3)} XMR</span>
+              </div>
+              <p className="text-[11px] text-slate-400 leading-relaxed">
+                Send to our verified cold vault via Cake Wallet. Instant onchain verification via tx hash.
+              </p>
+            </div>
+
+            {/* Address Details */}
+            <div className="space-y-3 text-xs">
+              <div className="space-y-1">
+                <span className="text-slate-400 font-semibold">USDT (Base Sepolia / Base Mainnet / Polygon):</span>
+                <div className="rounded-xl border border-white/5 bg-slate-950 p-2.5 font-mono text-[11px] text-sky-400 break-all select-all">
+                  0x384a143fC08545818E3b46D59c0ed66952879760
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <span className="text-slate-400 font-semibold">Monero (XMR - Cake Wallet Native):</span>
+                <div className="rounded-xl border border-white/5 bg-slate-950 p-2.5 font-mono text-[10px] text-amber-400 break-all select-all">
+                  888tNkZrPN6JsE99H8jYF7h7g...
+                </div>
+              </div>
+            </div>
+
+            {/* Deep-link Action */}
+            <div className="space-y-2 pt-2">
+              <a
+                href={`ethereum:0x384a143fC08545818E3b46D59c0ed66952879760?value=${usdtEquivalent}`}
+                className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 py-3 text-xs font-bold text-slate-950 transition-all duration-150 active:scale-[0.96]"
+              >
+                <span>🍰</span>
+                <span>Open in Cake Wallet App</span>
+              </a>
+              <p className="text-[10px] text-slate-500 text-center">
+                After transfer, forward tx hash to <strong>@AsliJobBot</strong> or email billing@aslijob.in to activate instantly.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

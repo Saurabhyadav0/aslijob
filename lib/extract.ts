@@ -5,7 +5,10 @@ const PHONE = /(?:\+?91[-\s]?)?\b([6-9]\d{9})\b/g;
 const UPI = /\b([a-z0-9.\-_]{2,})@([a-z]{2,})\b/gi;
 const EMAIL = /\b([a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,})\b/gi;
 const URL = /\bhttps?:\/\/[^\s]+|\bwww\.[^\s]+/gi;
-const WALLET = /\b(0x[a-fA-F0-9]{40})\b/g;
+const ETH_WALLET = /\b(0x[a-fA-F0-9]{40})\b/g;
+const TRON_WALLET = /\b(T[1-9A-HJ-NP-za-km-z]{33})\b/g;
+const MONERO_WALLET = /\b([48][0-9AB][1-9A-HJ-NP-za-km-z]{93})\b/g;
+const BITCOIN_WALLET = /\b(bc1[a-z0-9]{39,59}|[13][a-km-zA-HJ-NP-Z1-9]{25,34})\b/g;
 const TELEGRAM_HANDLE = /(?:t\.me\/|@)([a-z0-9_]{4,})/gi;
 const AMOUNT = /(?:rs\.?|₹|inr)\s*([\d,]{3,})/gi;
 const FEE_PURPOSE = /(registration|joining|training|laptop|security|interview|processing)/i;
@@ -30,7 +33,16 @@ export function extractFields(text: string, channel: Channel = "web"): Fields {
   );
   const phones = uniq(Array.from(text.matchAll(PHONE), (m) => m[1]));
   const urls = uniq(Array.from(text.matchAll(URL), (m) => m[0]));
-  const wallet_addresses = uniq(Array.from(text.matchAll(WALLET), (m) => m[1]));
+  const eth_wallets = Array.from(text.matchAll(ETH_WALLET), (m) => m[1]);
+  const tron_wallets = Array.from(text.matchAll(TRON_WALLET), (m) => m[1]);
+  const monero_wallets = Array.from(text.matchAll(MONERO_WALLET), (m) => m[1]);
+  const btc_wallets = Array.from(text.matchAll(BITCOIN_WALLET), (m) => m[1]);
+  const wallet_addresses = uniq([
+    ...eth_wallets,
+    ...tron_wallets,
+    ...monero_wallets,
+    ...btc_wallets,
+  ]);
   const telegram_handles = uniq(
     Array.from(text.matchAll(TELEGRAM_HANDLE), (m) => m[1].toLowerCase()),
   );
