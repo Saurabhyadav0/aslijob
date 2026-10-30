@@ -69,3 +69,4 @@ export async function GET(req: NextRequest) {
   const list = listDossiers(state ?? undefined);
   return NextResponse.json({ count: list.length, dossiers: list });
 }
+

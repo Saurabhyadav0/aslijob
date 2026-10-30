@@ -138,6 +138,7 @@ export default function VerifyPage() {
           ⚠️ {error}
         </div>
       )}
+      
 
       {/* Verification Result Banner */}
       {result && (

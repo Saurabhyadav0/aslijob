@@ -200,3 +200,4 @@ Jurisdiction: Cyber Crime Police Station, ${args.city}, ${args.state}
 5. APPLICABLE OFFENCES:
    Registration of FIR requested under Section 66D IT Act 2000 and Section 318(4) Bharatiya Nyaya Sanhita (BNS) 2023. Immediate freeze requested on suspect UPI handles and beneficiary bank accounts under Citizen Financial Cyber Fraud Reporting and Management System (CFCFRMS).`;
 }
+
