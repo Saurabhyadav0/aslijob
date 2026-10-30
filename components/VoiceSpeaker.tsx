@@ -72,3 +72,4 @@ export default function VoiceSpeaker({ verdict, confidence, firstReason, lang }:
     </button>
   );
 }
+

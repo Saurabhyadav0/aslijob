@@ -120,3 +120,4 @@ export default function VoiceInput({ lang, onTranscript, disabled = false }: Voi
     </div>
   );
 }
+

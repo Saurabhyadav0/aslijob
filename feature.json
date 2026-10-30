@@ -83,8 +83,8 @@
       "id": "F12",
       "behavior": "Chrome extension: a 'Check this' button on LinkedIn messages, Naukri listings and Gmail runs the shared check only when the user clicks",
       "verification": "npm run test -- extension",
-      "state": "not_started",
-      "evidence": ""
+      "state": "passing",
+      "evidence": "verified 2026-10-30"
     },
     {
       "id": "F13",

@@ -1,0 +1,33 @@
+{
+  "manifest_version": 3,
+  "name": "AsliJob — Job Scam Checker",
+  "version": "1.0.0",
+  "description": "Instant 1-Click Scam Checker for Indian job seekers on LinkedIn, Naukri, and Gmail.",
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "AsliJob Scam Checker"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*.linkedin.com/*",
+        "https://*.naukri.com/*",
+        "https://mail.google.com/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "permissions": [
+    "contextMenus",
+    "activeTab",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://aslijob.vercel.app/*",
+    "http://localhost:3000/*"
+  ]
+}
