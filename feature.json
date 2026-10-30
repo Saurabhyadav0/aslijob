@@ -132,8 +132,8 @@
       "id": "F19",
       "behavior": "Automated bank account freeze and mule alert dispatcher: evaluates high-loss mule accounts and generates structured CFCFRMS / NPCI freeze advisories for partner bank fraud desks",
       "verification": "npm run test -- freeze",
-      "state": "not_started",
-      "evidence": ""
+      "state": "passing",
+      "evidence": "verified 2026-10-31"
     }
   ]
 }

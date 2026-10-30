@@ -17,11 +17,13 @@ export async function GET(req: Request) {
 
   return NextResponse.json({
     ok: true,
-    batchId: batch.batchId,
+    count: batch.leafCount,
     leafCount: batch.leafCount,
+    batchId: batch.batchId,
     merkleRoot: batch.merkleRoot,
     contractAddress: batch.contractAddress,
     chainId: batch.chainId,
+    network: "base-sepolia",
     easUid: batch.easUid,
     timestamp: batch.timestamp,
   });
