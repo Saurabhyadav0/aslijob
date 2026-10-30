@@ -104,8 +104,8 @@
       "id": "F15",
       "behavior": "National Cybercrime 1930 / I4C complaint dossier: generates compliant law enforcement FIR dossiers with transaction trails and evidence hashes for cybercell reporting",
       "verification": "npm run test -- complaints",
-      "state": "not_started",
-      "evidence": ""
+      "state": "passing",
+      "evidence": "verified 2026-10-30"
     },
     {
       "id": "F16",
