@@ -69,8 +69,8 @@
       "id": "F10",
       "behavior": "Employer portal: a company proves its domain, lists real recruiters, issues verified offer letters and gets brand-impersonation alerts",
       "verification": "npm run test -- dashboard-employer",
-      "state": "not_started",
-      "evidence": ""
+      "state": "passing",
+      "evidence": "verified 2026-10-30"
     },
     {
       "id": "F11",
