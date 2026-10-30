@@ -62,8 +62,8 @@
       "id": "F09",
       "behavior": "College dashboard: a placement officer sees scams reported by their students and the gangs targeting the college, and can warn the whole batch (paid plan)",
       "verification": "npm run test -- dashboard-college",
-      "state": "not_started",
-      "evidence": ""
+      "state": "passing",
+      "evidence": "verified 2026-10-30"
     },
     {
       "id": "F10",

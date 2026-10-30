@@ -38,3 +38,4 @@ document.getElementById("checkBtn").addEventListener("click", async () => {
     btn.innerText = "🔍 Check Offer";
   }
 });
+
