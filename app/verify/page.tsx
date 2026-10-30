@@ -69,6 +69,20 @@ export default function VerifyPage() {
           </h1>
         </div>
         <p className="text-sm text-slate-400 leading-relaxed">{t.letterVerifySubtitle}</p>
+        <div className="flex items-center gap-2 pt-1 text-[11px]">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-sky-500/30 bg-sky-950/40 px-3 py-1 font-mono text-sky-300">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span>Sepolia Smart Contract:</span>
+            <a
+              href="https://sepolia.etherscan.io/address/0x6Fbc36723310fec0489Ec946A1975d68cAA1D50f"
+              target="_blank"
+              rel="noreferrer"
+              className="font-bold underline decoration-sky-400/50 hover:text-white"
+            >
+              0x6Fbc...D50f ↗
+            </a>
+          </span>
+        </div>
       </div>
 
       {/* Input */}
@@ -162,6 +176,18 @@ export default function VerifyPage() {
                   <code className="text-[11px] font-mono text-sky-400 break-all bg-slate-950/60 p-2 rounded-xl border border-white/5">
                     {result.easUid}
                   </code>
+                </div>
+                <div className="flex flex-col gap-1 py-1">
+                  <span className="text-slate-400">Onchain Verifier Contract:</span>
+                  <a
+                    href="https://sepolia.etherscan.io/address/0x6Fbc36723310fec0489Ec946A1975d68cAA1D50f"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1 text-[11px] font-mono text-emerald-400 break-all bg-slate-950/60 p-2.5 rounded-xl border border-white/5 hover:border-emerald-500/40 transition-colors"
+                  >
+                    <span className="truncate">0x6Fbc36723310fec0489Ec946A1975d68cAA1D50f</span>
+                    <span className="shrink-0 text-[10px] text-sky-400 font-sans font-semibold underline">View Contract on Etherscan ↗</span>
+                  </a>
                 </div>
               </div>
             </div>
