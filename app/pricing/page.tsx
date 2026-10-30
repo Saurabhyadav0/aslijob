@@ -258,19 +258,20 @@ function PricingContent() {
               </p>
             </div>
 
-            {/* Address Details */}
+            {/* Address & Cake Cash Handle Details */}
             <div className="space-y-3 text-xs">
               <div className="space-y-1">
-                <span className="text-slate-400 font-semibold">USDT (Base Sepolia / Base Mainnet / Polygon):</span>
-                <div className="rounded-xl border border-white/5 bg-slate-950 p-2.5 font-mono text-[11px] text-sky-400 break-all select-all">
-                  0x384a143fC08545818E3b46D59c0ed66952879760
+                <span className="text-slate-400 font-semibold">Cake Cash Handle (Direct Send):</span>
+                <div className="flex items-center justify-between rounded-xl border border-sky-500/30 bg-sky-950/40 p-2.5 font-mono text-xs text-sky-300 font-bold select-all">
+                  <span>saurabhyadav@cake.cash</span>
+                  <span className="text-[10px] text-sky-400 bg-sky-500/10 px-2 py-0.5 rounded-full border border-sky-500/20">Verified</span>
                 </div>
               </div>
 
               <div className="space-y-1">
-                <span className="text-slate-400 font-semibold">Monero (XMR - Cake Wallet Native):</span>
-                <div className="rounded-xl border border-white/5 bg-slate-950 p-2.5 font-mono text-[10px] text-amber-400 break-all select-all">
-                  888tNkZrPN6JsE99H8jYF7h7g...
+                <span className="text-slate-400 font-semibold">USDT / Web3 (Base Sepolia / Polygon / EVM):</span>
+                <div className="rounded-xl border border-white/5 bg-slate-950 p-2.5 font-mono text-[11px] text-slate-300 break-all select-all">
+                  0x561775f0aF9D93457a41B35e69e00B9c5113581C
                 </div>
               </div>
             </div>
@@ -278,11 +279,13 @@ function PricingContent() {
             {/* Deep-link Action */}
             <div className="space-y-2 pt-2">
               <a
-                href={`ethereum:0x384a143fC08545818E3b46D59c0ed66952879760?value=${usdtEquivalent}`}
+                href="https://cakewallet.com"
+                target="_blank"
+                rel="noreferrer"
                 className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 py-3 text-xs font-bold text-slate-950 transition-all duration-150 active:scale-[0.96]"
               >
                 <span>🍰</span>
-                <span>Open in Cake Wallet App</span>
+                <span>Send to saurabhyadav@cake.cash in Cake Wallet</span>
               </a>
               <p className="text-[10px] text-slate-500 text-center">
                 After transfer, forward tx hash to <strong>@AsliJobBot</strong> or email billing@aslijob.in to activate instantly.
