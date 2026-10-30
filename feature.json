@@ -76,8 +76,8 @@
       "id": "F11",
       "behavior": "WhatsApp bot: the same check runs inside WhatsApp via the WhatsApp Cloud API webhook",
       "verification": "npm run test -- whatsapp",
-      "state": "not_started",
-      "evidence": ""
+      "state": "passing",
+      "evidence": "verified 2026-10-30"
     },
     {
       "id": "F12",
