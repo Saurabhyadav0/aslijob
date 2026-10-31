@@ -13,7 +13,7 @@ type Kind = "target" | "identifier" | "report" | "clean";
 type Node = { id: string; label: string; sub: string; kind: Kind; x: number; y: number };
 
 const KIND_COLOR: Record<Kind, { fill: string; ring: string; text: string }> = {
-  target: { fill: "#0284C7", ring: "#38BDF8", text: "Checked identifier" },
+  target: { fill: "#059669", ring: "#34D399", text: "Checked identifier" },
   identifier: { fill: "#B45309", ring: "#FBBF24", text: "Shared pivot" },
   report: { fill: "#9F1239", ring: "#FB7185", text: "Confirmed scam report" },
   clean: { fill: "#047857", ring: "#34D399", text: "No fraud links" },
@@ -89,7 +89,7 @@ export default function GraphView({ graph, centralLabel = "Target" }: GraphViewP
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="flex h-6 w-6 items-center justify-center rounded-md bg-sky-500/10 text-sky-400">
+          <span className="flex h-6 w-6 items-center justify-center rounded-md bg-emerald-500/10 text-emerald-400">
             <Network size={14} />
           </span>
           <div className="leading-tight">
@@ -107,8 +107,8 @@ export default function GraphView({ graph, centralLabel = "Target" }: GraphViewP
         <svg viewBox={`0 0 ${W} ${H}`} className="h-52 w-full select-none">
           <defs>
             <radialGradient id="gTarget" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="#38BDF8" stopOpacity="0.55" />
-              <stop offset="100%" stopColor="#38BDF8" stopOpacity="0" />
+              <stop offset="0%" stopColor="#34D399" stopOpacity="0.55" />
+              <stop offset="100%" stopColor="#34D399" stopOpacity="0" />
             </radialGradient>
             <radialGradient id="gReport" cx="50%" cy="50%" r="50%">
               <stop offset="0%" stopColor="#FB7185" stopOpacity="0.55" />
@@ -238,7 +238,7 @@ export default function GraphView({ graph, centralLabel = "Target" }: GraphViewP
 
         {/* Legend */}
         <div className="pointer-events-none absolute bottom-2 left-3 flex items-center gap-3 text-[9px] font-semibold text-slate-400">
-          <span className="flex items-center gap-1"><i className="h-2 w-2 rounded-full bg-sky-500" /> You</span>
+          <span className="flex items-center gap-1"><i className="h-2 w-2 rounded-full bg-emerald-500" /> You</span>
           <span className="flex items-center gap-1"><i className="h-2 w-2 rounded-full bg-amber-500" /> Pivot</span>
           <span className="flex items-center gap-1"><i className="h-2 w-2 rounded-full bg-rose-500" /> Report</span>
         </div>
