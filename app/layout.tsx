@@ -30,19 +30,27 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="min-h-screen bg-slate-950 font-sans text-slate-100 antialiased selection:bg-sky-500/30 selection:text-sky-200">
-        {/* Background: faint grid + single restrained glow */}
+        {/* Background: animated command-center scene — aurora + panning grid + scanline */}
         <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
+          {/* drifting aurora blobs */}
+          <div className="aurora aurora-1 -top-40 -left-32 h-[520px] w-[520px] bg-sky-500/30" />
+          <div className="aurora aurora-2 top-1/3 -right-40 h-[560px] w-[560px] bg-fuchsia-600/20" />
+          <div className="aurora aurora-3 bottom-0 left-1/4 h-[480px] w-[480px] bg-indigo-600/20" />
+
+          {/* panning grid, faded toward edges */}
           <div
-            className="absolute inset-0 opacity-[0.18]"
+            className="grid-pan absolute inset-0 opacity-60"
             style={{
-              backgroundImage:
-                "linear-gradient(to right, rgba(148,163,184,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(148,163,184,0.06) 1px, transparent 1px)",
-              backgroundSize: "44px 44px",
-              maskImage: "radial-gradient(ellipse 80% 55% at 50% 0%, #000 40%, transparent 100%)",
-              WebkitMaskImage: "radial-gradient(ellipse 80% 55% at 50% 0%, #000 40%, transparent 100%)",
+              maskImage: "radial-gradient(ellipse 90% 70% at 50% 15%, #000 35%, transparent 100%)",
+              WebkitMaskImage: "radial-gradient(ellipse 90% 70% at 50% 15%, #000 35%, transparent 100%)",
             }}
           />
-          <div className="absolute -top-48 left-1/2 -translate-x-1/2 w-[900px] h-[440px] bg-sky-500/10 blur-[120px] rounded-full" />
+
+          {/* sweeping scanline */}
+          <div className="scanline" />
+
+          {/* vignette */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_120%_80%_at_50%_-10%,transparent_40%,rgba(2,6,23,0.6)_100%)]" />
         </div>
 
         <div className="mx-auto min-h-screen w-full max-w-6xl px-4 sm:px-6 lg:px-8 py-4 sm:py-6">

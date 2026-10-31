@@ -269,15 +269,20 @@ export default function Home() {
           </section>
 
           {/* Hero Header */}
-          <div className="space-y-3">
-            <div className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs font-medium text-slate-400">
-              <ShieldCheck size={13} className="text-sky-400" />
-              Free · No sign-up · English · हिंदी · मराठी
+          <div className="space-y-4">
+            <div className="float-slow inline-flex items-center gap-2 rounded-full border border-sky-400/30 bg-sky-400/[0.07] px-3.5 py-1.5 text-xs font-semibold text-sky-200 shadow-[0_0_24px_-6px_rgba(56,189,248,0.6)] backdrop-blur-md">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-sky-400" />
+              </span>
+              Free · No sign-up · EN · हिंदी · मराठी
             </div>
-            <h1 className="text-3xl font-extrabold leading-[1.1] tracking-tightest text-white sm:text-[2.6rem]">
-              {t.title}
+            <h1 className="text-4xl font-extrabold leading-[1.05] tracking-tightest drop-shadow-[0_2px_20px_rgba(56,189,248,0.25)] sm:text-[3.1rem]">
+              <span className="text-aurora glitch block" data-text={t.title}>
+                {t.title}
+              </span>
             </h1>
-            <p className="max-w-xl text-sm leading-relaxed text-slate-400">{t.subtitle}</p>
+            <p className="max-w-xl text-sm leading-relaxed text-slate-300/90">{t.subtitle}</p>
           </div>
 
           {/* Mode Navigation Tabs */}
@@ -400,9 +405,11 @@ export default function Home() {
               <button
                 onClick={() => handleCheck()}
                 disabled={loading || (tab === "paste" ? !text.trim() : !directInput.trim())}
-                className="flex w-full items-center justify-center gap-2.5 rounded-xl bg-sky-500 py-3.5 text-sm font-bold text-slate-950 shadow-sm transition-colors duration-150 hover:bg-sky-400 active:scale-[0.99] disabled:cursor-not-allowed disabled:bg-slate-800 disabled:text-slate-500"
+                className="btn-cyber flex w-full items-center justify-center gap-2.5 rounded-xl py-4 text-sm font-extrabold uppercase tracking-wide disabled:cursor-not-allowed"
               >
-                {loading ? <Bolt size={17} strokeWidth={2.2} /> : <ShieldCheck size={17} strokeWidth={2.2} />}
+                <span className={loading ? "animate-spin" : ""}>
+                  {loading ? <Bolt size={18} strokeWidth={2.4} /> : <ShieldCheck size={18} strokeWidth={2.4} />}
+                </span>
                 <span>{loading ? t.btnChecking : t.btnCheck}</span>
               </button>
             )}
@@ -578,7 +585,7 @@ export default function Home() {
         {/* Right Column: Live Threat Radar & Cyber Defense Feed */}
         <div className="space-y-5 lg:col-span-5">
           {/* Official Telegram Bot Card */}
-          <div className="space-y-3 rounded-2xl border border-sky-500/25 bg-gradient-to-br from-sky-500/[0.08] via-slate-900/70 to-slate-950 p-5 shadow-xl">
+          <div className="glow-border space-y-3 rounded-2xl bg-gradient-to-br from-sky-500/[0.1] via-slate-900/80 to-slate-950 p-5 shadow-xl">
             <div className="flex items-center justify-between">
               <span className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-sky-400">
                 <Bot size={15} /> Telegram Bot
