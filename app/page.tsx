@@ -270,9 +270,9 @@ export default function Home() {
 
           {/* Hero Header */}
           <div className="space-y-3">
-            <div className="inline-flex items-center gap-1.5 rounded-full border border-sky-500/25 bg-sky-500/[0.06] px-3 py-1 text-xs font-semibold text-sky-300">
-              <ShieldCheck size={13} />
-              Zero-fraud job-offer intelligence
+            <div className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs font-medium text-slate-400">
+              <ShieldCheck size={13} className="text-sky-400" />
+              Free · No sign-up · English · हिंदी · मराठी
             </div>
             <h1 className="text-3xl font-extrabold leading-[1.1] tracking-tightest text-white sm:text-[2.6rem]">
               {t.title}
@@ -400,15 +400,9 @@ export default function Home() {
               <button
                 onClick={() => handleCheck()}
                 disabled={loading || (tab === "paste" ? !text.trim() : !directInput.trim())}
-                className="btn-scan flex w-full items-center justify-center gap-2.5 rounded-xl py-4 text-sm font-extrabold uppercase tracking-wide text-sky-50 disabled:cursor-not-allowed disabled:opacity-40"
+                className="flex w-full items-center justify-center gap-2.5 rounded-xl bg-sky-500 py-3.5 text-sm font-bold text-slate-950 shadow-sm transition-colors duration-150 hover:bg-sky-400 active:scale-[0.99] disabled:cursor-not-allowed disabled:bg-slate-800 disabled:text-slate-500"
               >
-                <span className="corner tl" />
-                <span className="corner tr" />
-                <span className="corner bl" />
-                <span className="corner br" />
-                <span className={`text-sky-300 ${loading ? "animate-pulse" : ""}`}>
-                  {loading ? <Bolt size={18} strokeWidth={2.4} /> : <ShieldCheck size={18} strokeWidth={2.4} />}
-                </span>
+                {loading ? <Bolt size={17} strokeWidth={2.2} /> : <ShieldCheck size={17} strokeWidth={2.2} />}
                 <span>{loading ? t.btnChecking : t.btnCheck}</span>
               </button>
             )}
@@ -589,8 +583,8 @@ export default function Home() {
               <span className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-sky-400">
                 <Bot size={15} /> Telegram Bot
               </span>
-              <span className="flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-400">
-                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" /> Live
+              <span className="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-400">
+                Free
               </span>
             </div>
             <p className="text-xs leading-relaxed text-slate-300">
@@ -627,9 +621,8 @@ export default function Home() {
           <div className="space-y-4 rounded-2xl border border-white/[0.07] bg-slate-900/60 p-5 shadow-xl backdrop-blur-md">
             <div className="flex items-center justify-between">
               <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-200">
-                <Activity size={15} className="text-rose-400" /> Live scam wire · India
+                <Activity size={15} className="text-rose-400" /> Recent scam reports · India
               </span>
-              <PulseDot className="bg-rose-500" />
             </div>
 
             <div className="space-y-2">
