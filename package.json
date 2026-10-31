@@ -12,6 +12,8 @@
     "test:watch": "vitest",
     "eval": "tsx scripts/eval.ts",
     "seed": "tsx scripts/seed.ts",
+    "seed:db": "tsx scripts/seed-db.ts",
+    "migrate:graph": "tsx scripts/migrate-graph.ts",
     "graph:sync": "tsx scripts/graph-sync.ts"
   },
   "dependencies": {

@@ -1,8 +1,19 @@
 import type { GraphResult, IdentifierKind } from "./types";
 import { hashIdentifier } from "./hash";
 import { getGraph } from "./graph";
+import { neighbourRiskFromSupabase } from "./graph-supabase";
 
 type SeedIdentifier = { kind: IdentifierKind; value: string };
+
+/**
+ * Fallback graph read when TigerGraph is unavailable: try the seeded Supabase
+ * tables first, then the in-memory fixture graph. Keeps the same GraphResult.
+ */
+async function fallbackGraph(seeds: SeedIdentifier[]): Promise<GraphResult> {
+  const fromSupabase = await neighbourRiskFromSupabase(seeds);
+  if (fromSupabase) return fromSupabase;
+  return getGraph().neighbourRisk(seeds);
+}
 
 interface TigerGraphQueryResponse {
   error?: boolean;
@@ -74,14 +85,14 @@ export async function queryFraudGraph(
   const graphName = process.env.TIGERGRAPH_GRAPH || process.env.TG_GRAPH_NAME || "FraudGraph";
 
   if (!host || seeds.length === 0) {
-    const fallback = getGraph().neighbourRisk(seeds);
+    const fallback = await fallbackGraph(seeds);
     return { ...fallback, source: "postgres_fallback" };
   }
 
   try {
     const token = await getTigerGraphToken();
     if (!token) {
-      const fallback = getGraph().neighbourRisk(seeds);
+      const fallback = await fallbackGraph(seeds);
       return { ...fallback, source: "postgres_fallback" };
     }
 
@@ -121,7 +132,7 @@ export async function queryFraudGraph(
     // Graceful fallback per architectural contract (AGENTS.md constraint 9)
   }
 
-  const fallback = getGraph().neighbourRisk(seeds);
+  const fallback = await fallbackGraph(seeds);
   return { ...fallback, source: "postgres_fallback" };
 }
 

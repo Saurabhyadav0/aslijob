@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS public.reports (
   complaint_text TEXT NOT NULL,
   status TEXT NOT NULL DEFAULT 'unverified' CHECK (status IN ('unverified', 'confirmed', 'rejected')),
   college_id UUID,
+  city TEXT,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
